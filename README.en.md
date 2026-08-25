@@ -10,7 +10,7 @@
 
 # Model Effort Router
 
-A Codex Skill for routing long-running project work across model and reasoning-effort tiers. Version `0.2.0` is a public telemetry-first pilot: it gathers consented local execution statistics before making comparative claims about Sol, Terra, Luna, medium, high, or xhigh.
+A Codex Skill for routing long-running project work across model and reasoning-effort tiers. Version `0.2.1` is a public telemetry-first pilot: it gathers consented local execution statistics before making comparative claims about Sol, Terra, Luna, medium, high, or xhigh.
 
 ## 1 Why this exists
 
@@ -33,6 +33,17 @@ flowchart TD
 ```
 
 Figure 1. Real-project observation and later analysis flow
+
+### 2.1 Default conversation footer
+
+At the end of each normal delivery, the Skill appends only one concrete next segment and one exact route. Model names remain `Sol`, `Terra`, and `Luna`.
+
+```text
+下一段：Add a regression test for the failure path
+建议模型：Terra medium
+```
+
+The task contract, route rationale, alternatives, and telemetry status stay internal unless the user asks for them.
 
 ## 3 Privacy boundary
 

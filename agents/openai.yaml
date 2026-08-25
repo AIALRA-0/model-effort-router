@@ -1,6 +1,6 @@
 interface:
   display_name: "Model Effort Router"
-  short_description: "为下一轮选择模型并收集本地脱敏结果"
-  default_prompt: "Use $model-effort-router to route this project iteration, run its acceptance gates, and record the consented local outcome metadata."
+  short_description: "每轮交付后推荐下一段任务与模型档位"
+  default_prompt: "Use $model-effort-router throughout this project so every delivery ends with one concrete next segment and an exact Sol, Terra, or Luna effort recommendation."
 policy:
   allow_implicit_invocation: true
