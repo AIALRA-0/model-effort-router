@@ -8,6 +8,7 @@ venv/
 .coverage
 htmlcov/
 .pytest_cache/
+.playwright-cli/
 
 # Local telemetry and generated snapshots must never enter version control.
 telemetry/
