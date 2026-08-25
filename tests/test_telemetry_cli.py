@@ -32,7 +32,8 @@ class TelemetryCommandLineTest(unittest.TestCase):
         """A user must be able to run the whole lifecycle without leaking workspace identity."""
 
         with tempfile.TemporaryDirectory() as data_value, tempfile.TemporaryDirectory() as workspace_value:
-            data_dir = Path(data_value)
+            # Use a dedicated nested store so the production broad-path deletion guard stays active on Linux and Windows.
+            data_dir = Path(data_value) / "model-effort-router" / "telemetry"
             workspace = Path(workspace_value)
 
             # Explicit consent creates only the isolated local store.
