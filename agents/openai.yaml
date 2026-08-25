@@ -1,0 +1,6 @@
+interface:
+  display_name: "Model Effort Router"
+  short_description: "为下一轮选择模型并收集本地脱敏结果"
+  default_prompt: "Use $model-effort-router to route this project iteration, run its acceptance gates, and record the consented local outcome metadata."
+policy:
+  allow_implicit_invocation: true

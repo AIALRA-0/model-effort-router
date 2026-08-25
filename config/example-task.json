@@ -1,0 +1,32 @@
+{
+  "phase": "first_runnable",
+  "preference": "guarded_high",
+  "goal": "完成一个端到端纵向切片",
+  "non_goals": [
+    "不重写既有数据层",
+    "不改变公开 API"
+  ],
+  "allowed_scope": [
+    "src/",
+    "tests/"
+  ],
+  "acceptance_checks": [
+    "端到端测试通过",
+    "没有范围外修改",
+    "失败路径有回归测试"
+  ],
+  "ambiguity": 1,
+  "complexity": 3,
+  "blast_radius": 2,
+  "irreversibility": 1,
+  "verification_strength": 3,
+  "evidence_conflict": false,
+  "failed_hypotheses": 0,
+  "cross_module": true,
+  "public_interface_change": false,
+  "security_or_data_boundary": false,
+  "deployment_topology_change": false,
+  "final_red_team": false,
+  "host_can_switch": false,
+  "host_switch_confirmed": false
+}

@@ -1,0 +1,8 @@
+{
+  "minimum_completed_runs": 50,
+  "minimum_distinct_projects": 3,
+  "minimum_active_days": 14,
+  "minimum_runs_per_compared_route": 10,
+  "minimum_compared_routes": 2,
+  "public_export_minimum_group_size": 5
+}

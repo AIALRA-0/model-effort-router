@@ -1,0 +1,5 @@
+# Keep repository text deterministic across Windows, macOS, and Linux.
+* text=auto eol=lf
+
+# Treat the local hero asset as source-controlled XML text.
+*.svg text eol=lf

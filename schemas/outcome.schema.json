@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/AIALRA-0/model-effort-router/main/schemas/outcome.schema.json",
+  "title": "Model route outcome",
+  "type": "object",
+  "required": [
+    "task_id",
+    "task_class",
+    "actual_model",
+    "actual_effort",
+    "accepted"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "task_class": {
+      "type": "string"
+    },
+    "recommended_model": {
+      "type": "string"
+    },
+    "recommended_effort": {
+      "type": "string"
+    },
+    "actual_model": {
+      "type": "string"
+    },
+    "actual_effort": {
+      "type": "string"
+    },
+    "accepted": {
+      "type": "boolean"
+    },
+    "severe_defect": {
+      "type": "boolean",
+      "default": false
+    },
+    "scope_violation": {
+      "type": "boolean",
+      "default": false
+    },
+    "regression": {
+      "type": "boolean",
+      "default": false
+    },
+    "rework_minutes": {
+      "type": "number",
+      "minimum": 0,
+      "default": 0
+    },
+    "input_tokens": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "cached_input_tokens": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "output_tokens": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "tool_calls": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,182 @@
+[
+  {
+    "name": "initial research routes to pro web",
+    "input": {
+      "phase": "initial_research",
+      "preference": "guarded_high"
+    },
+    "expected": {
+      "model": "chatgpt-pro-web",
+      "effort": "deep_research"
+    }
+  },
+  {
+    "name": "quality convergence uses sol xhigh",
+    "input": {
+      "phase": "project_convergence",
+      "preference": "quality_first",
+      "ambiguity": 1
+    },
+    "expected": {
+      "model": "sol",
+      "effort": "xhigh"
+    }
+  },
+  {
+    "name": "guarded clear first runnable uses sol high",
+    "input": {
+      "phase": "first_runnable",
+      "preference": "guarded_high",
+      "ambiguity": 1,
+      "verification_strength": 3
+    },
+    "expected": {
+      "model": "sol",
+      "effort": "high"
+    }
+  },
+  {
+    "name": "quality first runnable keeps sol xhigh",
+    "input": {
+      "phase": "first_runnable",
+      "preference": "quality_first",
+      "ambiguity": 1,
+      "verification_strength": 3
+    },
+    "expected": {
+      "model": "sol",
+      "effort": "xhigh"
+    }
+  },
+  {
+    "name": "guarded routine clear work uses terra medium",
+    "input": {
+      "phase": "routine_implementation",
+      "preference": "guarded_high",
+      "ambiguity": 1,
+      "verification_strength": 3,
+      "blast_radius": 1
+    },
+    "expected": {
+      "model": "terra",
+      "effort": "medium"
+    }
+  },
+  {
+    "name": "quality routine work uses terra high",
+    "input": {
+      "phase": "routine_implementation",
+      "preference": "quality_first",
+      "ambiguity": 1,
+      "verification_strength": 3
+    },
+    "expected": {
+      "model": "terra",
+      "effort": "high"
+    }
+  },
+  {
+    "name": "guarded bounded complex work starts terra high",
+    "input": {
+      "phase": "complex_implementation",
+      "preference": "guarded_high",
+      "ambiguity": 1,
+      "complexity": 3,
+      "cross_module": true,
+      "verification_strength": 3
+    },
+    "expected": {
+      "model": "terra",
+      "effort": "high"
+    }
+  },
+  {
+    "name": "quality bounded complex work uses terra xhigh",
+    "input": {
+      "phase": "complex_implementation",
+      "preference": "quality_first",
+      "ambiguity": 1,
+      "complexity": 3,
+      "cross_module": true,
+      "verification_strength": 3
+    },
+    "expected": {
+      "model": "terra",
+      "effort": "xhigh"
+    }
+  },
+  {
+    "name": "mechanical guarded work uses luna medium",
+    "input": {
+      "phase": "mechanical",
+      "preference": "guarded_high",
+      "complexity": 1
+    },
+    "expected": {
+      "model": "luna",
+      "effort": "medium"
+    }
+  },
+  {
+    "name": "mechanical balanced single step uses luna low",
+    "input": {
+      "phase": "mechanical",
+      "preference": "balanced",
+      "complexity": 0
+    },
+    "expected": {
+      "model": "luna",
+      "effort": "low"
+    }
+  },
+  {
+    "name": "two failed debug hypotheses escalate sol xhigh",
+    "input": {
+      "phase": "debugging",
+      "preference": "guarded_high",
+      "failed_hypotheses": 2
+    },
+    "expected": {
+      "model": "sol",
+      "effort": "xhigh"
+    }
+  },
+  {
+    "name": "guarded routine review uses sol high",
+    "input": {
+      "phase": "review",
+      "preference": "guarded_high",
+      "ambiguity": 1,
+      "blast_radius": 1
+    },
+    "expected": {
+      "model": "sol",
+      "effort": "high"
+    }
+  },
+  {
+    "name": "quality review uses sol xhigh",
+    "input": {
+      "phase": "review",
+      "preference": "quality_first",
+      "ambiguity": 1
+    },
+    "expected": {
+      "model": "sol",
+      "effort": "xhigh"
+    }
+  },
+  {
+    "name": "security ambiguity forces sol xhigh",
+    "input": {
+      "phase": "complex_implementation",
+      "preference": "balanced",
+      "security_or_data_boundary": true,
+      "ambiguity": 3
+    },
+    "expected": {
+      "model": "sol",
+      "effort": "xhigh"
+    }
+  }
+]

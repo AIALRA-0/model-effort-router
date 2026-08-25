@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/AIALRA-0/model-effort-router/main/schemas/telemetry-record.schema.json",
+  "title": "Privacy-preserving model route telemetry record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "started_at",
+    "finished_at",
+    "machine_id",
+    "project_id",
+    "policy",
+    "task_class",
+    "recommended",
+    "actual",
+    "outcome",
+    "verification",
+    "usage",
+    "user_override"
+  ],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "run_id": {"type": "string", "format": "uuid"},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": "string", "format": "date-time"},
+    "duration_seconds": {"type": "number", "minimum": 0},
+    "machine_id": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "project_id": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "policy": {"enum": ["quality_first", "guarded_high", "balanced"]},
+    "task_class": {"type": "string", "pattern": "^[a-z0-9_.]{1,64}$"},
+    "risk_level": {"type": "integer", "minimum": 0, "maximum": 4},
+    "verification_strength": {"type": "integer", "minimum": 0, "maximum": 4},
+    "context_mode": {"enum": ["fresh", "compressed_handoff", "continued", "unknown"]},
+    "route_source": {
+      "enum": ["policy_based_uncalibrated", "policy_based_calibrated", "user_selected", "host_default"]
+    },
+    "recommended": {"$ref": "#/$defs/route"},
+    "actual": {"$ref": "#/$defs/route"},
+    "workspace_before": {"$ref": "#/$defs/workspaceStats"},
+    "workspace_after": {"$ref": "#/$defs/workspaceStats"},
+    "outcome": {
+      "type": "object",
+      "required": ["status", "accepted", "severe_defect", "scope_violation", "regression"],
+      "properties": {
+        "status": {"enum": ["accepted", "rejected", "aborted", "error"]},
+        "accepted": {"type": ["boolean", "null"]},
+        "severe_defect": {"type": "boolean"},
+        "scope_violation": {"type": "boolean"},
+        "regression": {"type": "boolean"},
+        "failed_hypotheses": {"type": "integer", "minimum": 0},
+        "rework_minutes": {"type": ["number", "null"], "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "properties": {
+        "tests_run": {"type": ["integer", "null"], "minimum": 0},
+        "tests_passed": {"type": ["integer", "null"], "minimum": 0},
+        "tests_failed": {"type": ["integer", "null"], "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "usage": {
+      "type": "object",
+      "required": ["measurement_source"],
+      "properties": {
+        "measurement_source": {"enum": ["host_reported", "transcript_counted", "estimated", "unavailable"]},
+        "input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "cached_input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "reasoning_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "tool_calls": {"type": ["integer", "null"], "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "user_override": {
+      "type": "object",
+      "required": ["applied", "reason_category"],
+      "properties": {
+        "applied": {"type": "boolean"},
+        "reason_category": {"enum": ["none", "quality", "risk", "cost", "latency", "availability", "other"]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "route": {
+      "type": "object",
+      "required": ["model", "effort"],
+      "properties": {
+        "model": {"type": "string", "pattern": "^[a-z0-9_.]{1,64}$"},
+        "effort": {"type": "string", "pattern": "^[a-z0-9_.]{1,64}$"}
+      },
+      "additionalProperties": false
+    },
+    "workspaceStats": {
+      "type": "object",
+      "required": ["available", "source"],
+      "properties": {
+        "available": {"type": "boolean"},
+        "source": {"const": "git_diff_numstat"},
+        "changed_files": {"type": "integer", "minimum": 0},
+        "insertions": {"type": "integer", "minimum": 0},
+        "deletions": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

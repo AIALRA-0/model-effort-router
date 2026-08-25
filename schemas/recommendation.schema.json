@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/AIALRA-0/model-effort-router/main/schemas/recommendation.schema.json",
+  "title": "Next iteration route recommendation",
+  "type": "object",
+  "required": [
+    "version",
+    "task_class",
+    "primary",
+    "alternatives",
+    "execution_status",
+    "acceptance_contract"
+  ],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "task_class": {
+      "type": "string"
+    },
+    "primary": {
+      "$ref": "#/$defs/route"
+    },
+    "alternatives": {
+      "type": "array",
+      "maxItems": 2,
+      "items": {
+        "$ref": "#/$defs/route"
+      }
+    },
+    "execution_status": {
+      "enum": [
+        "recommendation_only",
+        "switch_available_but_unconfirmed",
+        "confirmed_switched"
+      ]
+    },
+    "policy_confidence": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "calibration_status": {
+      "type": "string"
+    },
+    "required_before_execution": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acceptance_contract": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "route": {
+      "type": "object",
+      "required": [
+        "profile",
+        "model",
+        "effort",
+        "display_name",
+        "reasons",
+        "escalation_triggers",
+        "downgrade_triggers"
+      ],
+      "properties": {
+        "profile": {
+          "enum": [
+            "quality_first",
+            "guarded_high",
+            "balanced"
+          ]
+        },
+        "model": {
+          "type": "string"
+        },
+        "effort": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "escalation_triggers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "downgrade_triggers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tradeoff": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,239 @@
+{
+  "meta": {
+    "contract_version": "1.0",
+    "title": "Telemetry-first independent release decision",
+    "mode": "deep",
+    "as_of": "2026-08-25",
+    "status": "ready_for_external_gate",
+    "scope": "Review v0.1, defer a paper, build consented real-project telemetry, and publish a privacy-safe independent pilot.",
+    "exclusions": [
+      "No causal model or effort comparison before real observations exist",
+      "No prompts, responses, code, diffs, logs, paths, file names, credentials, or personal data",
+      "No mutation of the predecessor pull request"
+    ]
+  },
+  "decision_problem": {
+    "project_classification": "reversible public developer-tool pilot with local privacy-sensitive metadata",
+    "risk_level": "high because public release and longitudinal observation can create privacy and evidence-quality harm",
+    "decision_owner": "the user and GitHub repository owner AIALRA-0",
+    "desired_outcome": "Collect enough consented real-project metadata for a later whole-machine analysis without premature model claims.",
+    "current_state": "v0.1 has a deterministic router and manual analyzer but no automatic consented start-finish lifecycle or de-identified machine snapshot.",
+    "decision": "Whether to publish an independent telemetry-first Skill now and postpone research conclusions until review gates are reached.",
+    "success_metrics": [
+      "Collection stays disabled until explicit local enablement",
+      "A full synthetic lifecycle exposes no workspace identity in records or snapshots",
+      "The public repository has bilingual entrypoints, security policy, license, CI, tests, schemas, and evidence limits",
+      "A later status report distinguishes runs, projects, active days, routes, malformed records, and unknown usage",
+      "No model win-rate or causal claim appears before the review gate"
+    ],
+    "constraints": [
+      "Fixed categories and non-negative measurements only",
+      "Raw records remain local and the runtime has no uploader",
+      "Standalone GitHub repository with redaction checks",
+      "No research paper in this phase",
+      "Unavailable token measurements remain null"
+    ],
+    "irreversible_actions": [
+      "Public Git history can persist after repository deletion",
+      "Published releases can be mirrored",
+      "Local purge cannot be undone"
+    ],
+    "research_budget": {
+      "overall_limit": "One 2026-08-25 release audit bounded to official guidance, primary research, telemetry standards, GitHub prior art, and the supplied artifact.",
+      "parallel_capacity": 1,
+      "paid_or_private_access": ["Authenticated access to the user's GitHub repositories", "No paid patent or market database"],
+      "cutoff_policy": "Stop novelty expansion after direct near matches disprove router uniqueness; preserve causal questions for the later dataset."
+    },
+    "reversal_evidence": [
+      "A record or snapshot contains prohibited content or a stable public identifier",
+      "Runs cannot be reliably finalized",
+      "A close predecessor already provides the same consented privacy-minimized lifecycle",
+      "Users cannot understand or control enable, disable, snapshot, and purge"
+    ]
+  },
+  "questions": [
+    {
+      "id": "Q1",
+      "question": "Does v0.1 already contain a complete real-execution statistics system?",
+      "critical": true,
+      "internal_probe": "Inspect the supplied archive, hash, inventory, README, code, and tests.",
+      "external_probe": "Inspect the public predecessor pull request and exact file list.",
+      "internal_status": "answered",
+      "external_status": "answered",
+      "internal_source_ids": ["I2"],
+      "external_source_ids": ["E1"],
+      "internal_gap": "",
+      "external_gap": ""
+    },
+    {
+      "id": "Q2",
+      "question": "Can the project claim model routing as unique?",
+      "critical": true,
+      "internal_probe": "Compare v0.1 routing with the v0.2 release boundary.",
+      "external_probe": "Search GitHub and primary routing research for close substitutes.",
+      "internal_status": "answered",
+      "external_status": "answered",
+      "internal_source_ids": ["I2", "I3"],
+      "external_source_ids": ["E3", "E4", "E5"],
+      "internal_gap": "",
+      "external_gap": ""
+    },
+    {
+      "id": "Q3",
+      "question": "What controls are required before collecting real project statistics?",
+      "critical": true,
+      "internal_probe": "Inspect consent, schema, pseudonyms, snapshot suppression, deletion, and tests.",
+      "external_probe": "Compare official model guidance, failure research, and telemetry conventions.",
+      "internal_status": "answered",
+      "external_status": "answered",
+      "internal_source_ids": ["I1", "I3"],
+      "external_source_ids": ["E2", "E6", "E7", "E8"],
+      "internal_gap": "",
+      "external_gap": ""
+    }
+  ],
+  "source_map": [
+    {"id": "M1", "question_ids": ["Q1"], "origin": "internal", "channel": "local artifact inspection", "target": "v0.1 archive", "decision_use": "verify implemented scope", "priority": "high", "access_status": "searched"},
+    {"id": "M2", "question_ids": ["Q1"], "origin": "external", "channel": "GitHub API", "target": "predecessor pull request", "decision_use": "verify public inventory", "priority": "high", "access_status": "searched"},
+    {"id": "M3", "question_ids": ["Q2"], "origin": "internal", "channel": "local code comparison", "target": "v0.1 and v0.2", "decision_use": "bound differentiation", "priority": "high", "access_status": "searched"},
+    {"id": "M4", "question_ids": ["Q2"], "origin": "external", "channel": "GitHub and arXiv", "target": "routers and routing research", "decision_use": "avoid novelty overclaim", "priority": "high", "access_status": "searched"},
+    {"id": "M5", "question_ids": ["Q3"], "origin": "internal", "channel": "implementation tests", "target": "collector, schema, policy, purge, snapshot", "decision_use": "verify privacy controls", "priority": "high", "access_status": "searched"},
+    {"id": "M6", "question_ids": ["Q3"], "origin": "external", "channel": "official docs and research", "target": "model, telemetry, and overthinking evidence", "decision_use": "challenge xhigh and rich telemetry defaults", "priority": "high", "access_status": "searched"}
+  ],
+  "sources": [
+    {
+      "id": "I1", "origin": "internal", "title": "Decision-owner instruction", "location": "current user instruction dated 2026-08-25", "source_type": "interview-record", "retrieval_method": "direct reading", "observed_content": "The user postponed the paper and requested real-project statistics, privacy redaction, independent GitHub publication, and end-to-end execution.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Defines scope and authority.", "limitations": "No model-performance data or code review.", "direct": true, "independence_group": "decision-owner"
+    },
+    {
+      "id": "I2", "origin": "internal", "title": "Supplied v0.1 artifact", "location": "SHA-256 337D54E594AE86F06C1C8B5B7A8D645FE2EC5E47AAE661B51FE7E6C54CE0EF1B", "source_type": "internal-artifact", "retrieval_method": "hash, extraction, inventory, inspection, and tests", "observed_content": "The archive has routing and manual analysis but lacks consented start-finish collection, readiness, and de-identified snapshot; its README lists absent files.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Establishes the baseline.", "limitations": "Only proves the hashed snapshot.", "direct": true, "independence_group": "predecessor-artifact"
+    },
+    {
+      "id": "I3", "origin": "internal", "title": "v0.2 implementation and verification", "location": "repository-relative runtime, schema, policy, and tests", "source_type": "test-observation", "retrieval_method": "code inspection, validation, compilation, unit tests, and synthetic CLI lifecycle", "observed_content": "Collection defaults off, fixed metadata is pseudonymized, unknown usage remains null, sparse rates are suppressed, UUIDs are validated, and purge requires an exact phrase.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Tests the release candidate.", "limitations": "Synthetic tests do not prove adoption, causality, or resistance to a local file-reading attacker.", "direct": true, "independence_group": "release-candidate"
+    },
+    {
+      "id": "I4", "origin": "internal", "title": "Deterministic package and privacy validator output", "location": "tool:scripts/validate_package.py/2026-08-25", "source_type": "agent-artifact", "retrieval_method": "isolated deterministic validator execution", "observed_content": "The validator checked required release files, research-tree exclusion, public-text redaction patterns, collection policy, Skill lifecycle commands, and CI presence and returned passed.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Provides a context-isolated tool perspective on release invariants.", "limitations": "Pattern scanning cannot prove that no sensitive meaning is present or replace human security review.", "direct": true, "independence_group": "deterministic-package-validator"
+    },
+    {
+      "id": "E1", "origin": "external", "title": "Codex-Switcher-Web pull request 1", "location": "https://github.com/AIALRA-0/Codex-Switcher-Web/pull/1", "source_type": "source-code", "retrieval_method": "GitHub CLI detail and file inventory", "observed_content": "The open mergeable pull request has 19 commits, 19 added files, 2,224 additions, and no telemetry lifecycle.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Confirms public predecessor scope.", "limitations": "May change later.", "direct": true, "independence_group": "predecessor-public"
+    },
+    {
+      "id": "E2", "origin": "external", "title": "Using GPT-5.6", "location": "https://developers.openai.com/api/docs/guides/latest-model", "source_type": "official-doc", "retrieval_method": "direct official web retrieval", "observed_content": "OpenAI presents model and reasoning choices as workload-dependent and medium as a baseline adjusted by evaluation.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Supports evidence-gated routing.", "limitations": "Does not quantify local projects or subscription credits.", "direct": true, "independence_group": "openai"
+    },
+    {
+      "id": "E3", "origin": "external", "title": "capitalparser/codex-model-router", "location": "https://github.com/capitalparser/codex-model-router", "source_type": "source-code", "retrieval_method": "direct repository inspection", "observed_content": "Implements phase-aware Sol, Terra, Luna routing with evidence-gated escalation.", "date": "2026-07-15", "accessed_at": "2026-08-25", "applicability": "Direct routing near match.", "limitations": "No independent review of this telemetry design.", "direct": true, "independence_group": "capitalparser"
+    },
+    {
+      "id": "E4", "origin": "external", "title": "GPT5.6-SOLTELU-Model-Inverter", "location": "https://github.com/AlexAI-MCP/GPT5.6-SOLTELU-Model-Inverter", "source_type": "source-code", "retrieval_method": "direct repository inspection", "observed_content": "Publicly routes Sol, Terra, and Luna with quality-per-token goals and predates this release.", "date": "2026-07-11", "accessed_at": "2026-08-25", "applicability": "Counters uniqueness.", "limitations": "Does not establish comparative quality.", "direct": true, "independence_group": "alexai-mcp"
+    },
+    {
+      "id": "E5", "origin": "external", "title": "BEST-Route", "location": "https://arxiv.org/abs/2506.22716", "source_type": "primary-research", "retrieval_method": "direct arXiv abstract inspection", "observed_content": "Studies adaptive LLM routing and test-time compute jointly.", "date": "2025-06-27", "accessed_at": "2026-08-25", "applicability": "Establishes research prior art.", "limitations": "Different models and workloads.", "direct": true, "independence_group": "best-route-authors"
+    },
+    {
+      "id": "E6", "origin": "external", "title": "The Danger of Overthinking", "location": "https://arxiv.org/abs/2502.08235", "source_type": "primary-research", "retrieval_method": "direct arXiv abstract inspection", "observed_content": "Analyzes 4,018 trajectories and reports agentic failure patterns associated with extended reasoning.", "date": "2025-02-12", "accessed_at": "2026-08-25", "applicability": "Challenges universal xhigh safety.", "limitations": "Does not test the user's GPT-5.6 workload.", "direct": true, "independence_group": "overthinking-authors"
+    },
+    {
+      "id": "E7", "origin": "external", "title": "OpenTelemetry Gen AI attributes", "location": "https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/", "source_type": "official-doc", "retrieval_method": "direct official retrieval", "observed_content": "Separates token fields from message, instruction, retrieval, and tool fields and warns that content can be sensitive.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Supports content-free usage telemetry.", "limitations": "Not a complete local privacy model.", "direct": true, "independence_group": "opentelemetry"
+    },
+    {
+      "id": "E8", "origin": "external", "title": "OpenTelemetry attribute requirement levels", "location": "https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/", "source_type": "official-doc", "retrieval_method": "direct official retrieval", "observed_content": "Opt-In fields should be emitted only when configured and suit privacy-risk data.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Supports explicit consent.", "limitations": "General guidance, not legal advice.", "direct": true, "independence_group": "opentelemetry"
+    },
+    {"id": "SL-problem", "origin": "external", "title": "Problem query log", "location": "https://github.com/search?q=Sol+Terra+Luna+Codex+model+router&type=repositories", "source_type": "search-log", "retrieval_method": "GitHub search", "observed_content": "Returned multiple routers addressing expensive universal defaults.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Problem discovery.", "limitations": "Dynamic ranking.", "direct": true, "independence_group": "search-problem"},
+    {"id": "SL-mechanism", "origin": "external", "title": "Mechanism query log", "location": "https://github.com/search?q=evidence-gated+model+routing+Codex&type=code", "source_type": "search-log", "retrieval_method": "GitHub code search", "observed_content": "Returned deterministic policies and escalation gates.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Mechanism discovery.", "limitations": "Not exhaustive.", "direct": true, "independence_group": "search-mechanism"},
+    {"id": "SL-product", "origin": "external", "title": "Product query log", "location": "https://github.com/search?q=codex-model-router&type=repositories", "source_type": "search-log", "retrieval_method": "GitHub repository search", "observed_content": "Returned installable model routers.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Substitute discovery.", "limitations": "Private repositories absent.", "direct": true, "independence_group": "search-product"},
+    {"id": "SL-research", "origin": "external", "title": "Research query log", "location": "https://arxiv.org/search/?query=adaptive+LLM+routing+reasoning&searchtype=all", "source_type": "search-log", "retrieval_method": "arXiv search", "observed_content": "Returned adaptive routing research including BEST-Route.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Research discovery.", "limitations": "English query only.", "direct": true, "independence_group": "search-research"},
+    {"id": "SL-adjacent", "origin": "external", "title": "Adjacent telemetry query log", "location": "https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/", "source_type": "search-log", "retrieval_method": "official-site search", "observed_content": "Found token, message, tool, and sensitivity conventions.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Adjacent design evidence.", "limitations": "Not a research protocol.", "direct": true, "independence_group": "search-adjacent"},
+    {"id": "SL-failure", "origin": "external", "title": "Failure query log", "location": "https://arxiv.org/abs/2502.08235", "source_type": "search-log", "retrieval_method": "primary research search", "observed_content": "Found measured agentic overthinking failures.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Counterevidence discovery.", "limitations": "One study.", "direct": true, "independence_group": "search-failure"},
+    {"id": "SL-code", "origin": "external", "title": "Code query log", "location": "https://github.com/search?q=%22model-effort-router%22&type=code", "source_type": "search-log", "retrieval_method": "exact GitHub code search", "observed_content": "Returned neighboring model-effort-router skills.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Implementation-neighborhood search.", "limitations": "Dynamic and incomplete.", "direct": true, "independence_group": "search-code"}
+  ],
+  "claims": [
+    {"id": "C1", "statement": "v0.1 lacks the requested consented automatic telemetry lifecycle.", "kind": "fact", "impact": "high", "confidence": "high", "support_source_ids": ["I2", "E1"], "contradict_source_ids": [], "falsifier": "The hashed artifact contains enable, start, finish, status, snapshot, and purge."},
+    {"id": "C2", "statement": "Sol, Terra, and Luna task routing is public prior art.", "kind": "fact", "impact": "high", "confidence": "high", "support_source_ids": ["E3", "E4"], "contradict_source_ids": [], "falsifier": "The cited repositories postdate this release or do not route the same model family."},
+    {"id": "C3", "statement": "Available evidence does not justify universal xhigh because agentic overthinking can reduce performance and local evaluation is required.", "kind": "inference", "impact": "high", "confidence": "medium", "support_source_ids": ["E2", "E6"], "contradict_source_ids": [], "falsifier": "Representative local evaluation shows xhigh dominates on quality, rework, scope, latency, and usage."},
+    {"id": "C4", "statement": "v0.2 enforces disabled-by-default and content exclusion in tested paths.", "kind": "fact", "impact": "high", "confidence": "high", "support_source_ids": ["I3"], "contradict_source_ids": [], "falsifier": "A test finds prohibited text, a path, an unsafe run identifier, or a stable snapshot identifier."},
+    {"id": "C5", "statement": "The 50-run gate is an operational trigger, not guaranteed statistical power or causality.", "kind": "fact", "impact": "high", "confidence": "high", "support_source_ids": ["I3", "E5"], "contradict_source_ids": [], "falsifier": "A preregistered power analysis establishes sufficiency for a defined endpoint and effect size."}
+  ],
+  "assumptions": [
+    {"id": "A1", "statement": "The Skill will run across enough representative projects.", "critical": true, "status": "uncertain", "decision_impact": "Otherwise summaries describe a selected minority.", "falsifier": "After 14 active days many eligible tasks lack records or active runs are abandoned.", "support_source_ids": ["I1"], "contradict_source_ids": []},
+    {"id": "A2", "statement": "Fixed categories capture enough confounding structure for an initial descriptive review.", "critical": true, "status": "untested", "decision_impact": "Otherwise route comparisons remain uninterpretable.", "falsifier": "Within-category variance overwhelms route differences.", "support_source_ids": ["I3"], "contradict_source_ids": ["E5", "E6"]},
+    {"id": "A3", "statement": "The host exposes usage measurements often enough.", "critical": false, "status": "uncertain", "decision_impact": "Without them only quality and rework can be analyzed.", "falsifier": "Most runs remain unavailable or use incomparable definitions.", "support_source_ids": ["E7"], "contradict_source_ids": []},
+    {"id": "A4", "statement": "Pseudonym removal and small-group suppression sufficiently reduce disclosure risk.", "critical": true, "status": "uncertain", "decision_impact": "Otherwise snapshots stay private or categories are coarsened.", "falsifier": "A review re-identifies a project from rare combinations.", "support_source_ids": ["I3", "E8"], "contradict_source_ids": ["E7"]}
+  ],
+  "search_branches": [
+    {"name": "adjacent", "status": "executed", "reason": "Searched GenAI observability and privacy.", "round_ids": ["R-adjacent"]},
+    {"name": "code", "status": "executed", "reason": "Searched exact router implementations.", "round_ids": ["R-code"]},
+    {"name": "failure", "status": "executed", "reason": "Searched primary overthinking evidence.", "round_ids": ["R-failure"]},
+    {"name": "mechanism", "status": "executed", "reason": "Searched routing mechanisms.", "round_ids": ["R-mechanism"]},
+    {"name": "patent", "status": "not_applicable", "reason": "No patentability or freedom-to-operate claim is made; legal clearance is outside scope.", "round_ids": []},
+    {"name": "problem", "status": "executed", "reason": "Searched the universal expensive-model problem.", "round_ids": ["R-problem"]},
+    {"name": "product", "status": "executed", "reason": "Searched installable substitutes.", "round_ids": ["R-product"]},
+    {"name": "research", "status": "executed", "reason": "Searched adaptive-routing research.", "round_ids": ["R-research"]}
+  ],
+  "search_rounds": [
+    {"id": "R-problem", "branch": "problem", "query": "Sol Terra Luna Codex model router expensive universal default", "channel": "GitHub", "date": "2026-08-25", "discovery_mode": "keyword", "new_candidate_ids": ["K1", "K2"], "evidence_source_ids": ["E3", "E4"], "search_log_source_id": "SL-problem", "new_high_similarity_count": 2, "new_decision_evidence_count": 2},
+    {"id": "R-mechanism", "branch": "mechanism", "query": "evidence-gated model routing Codex", "channel": "GitHub code search", "date": "2026-08-25", "discovery_mode": "mechanism-term", "new_candidate_ids": [], "evidence_source_ids": ["E3"], "search_log_source_id": "SL-mechanism", "new_high_similarity_count": 0, "new_decision_evidence_count": 1},
+    {"id": "R-product", "branch": "product", "query": "codex-model-router", "channel": "GitHub repositories", "date": "2026-08-25", "discovery_mode": "product-term", "new_candidate_ids": [], "evidence_source_ids": ["E3", "E4"], "search_log_source_id": "SL-product", "new_high_similarity_count": 0, "new_decision_evidence_count": 1},
+    {"id": "R-research", "branch": "research", "query": "adaptive LLM routing reasoning test-time compute", "channel": "arXiv", "date": "2026-08-25", "discovery_mode": "primary-research", "new_candidate_ids": ["K3"], "evidence_source_ids": ["E5"], "search_log_source_id": "SL-research", "new_high_similarity_count": 1, "new_decision_evidence_count": 1},
+    {"id": "R-adjacent", "branch": "adjacent", "query": "OpenTelemetry GenAI sensitive content opt-in token usage", "channel": "OpenTelemetry", "date": "2026-08-25", "discovery_mode": "adjacent-standard", "new_candidate_ids": [], "evidence_source_ids": ["E7", "E8"], "search_log_source_id": "SL-adjacent", "new_high_similarity_count": 0, "new_decision_evidence_count": 2},
+    {"id": "R-failure", "branch": "failure", "query": "overthinking reasoning models agentic software tasks", "channel": "arXiv", "date": "2026-08-25", "discovery_mode": "counterevidence", "new_candidate_ids": [], "evidence_source_ids": ["E6"], "search_log_source_id": "SL-failure", "new_high_similarity_count": 0, "new_decision_evidence_count": 1},
+    {"id": "R-code", "branch": "code", "query": "model-effort-router", "channel": "GitHub code search", "date": "2026-08-25", "discovery_mode": "exact-term", "new_candidate_ids": [], "evidence_source_ids": ["E3", "E4"], "search_log_source_id": "SL-code", "new_high_similarity_count": 0, "new_decision_evidence_count": 1}
+  ],
+  "candidates": [
+    {"id": "K1", "name": "capitalparser/codex-model-router", "class": "near", "verified": true, "source_ids": ["E3"]},
+    {"id": "K2", "name": "GPT5.6-SOLTELU-Model-Inverter", "class": "near", "verified": true, "source_ids": ["E4"]},
+    {"id": "K3", "name": "BEST-Route", "class": "adjacent", "verified": true, "source_ids": ["E5"]}
+  ],
+  "novelty": {
+    "applicable": true,
+    "applicability_reason": "Independent publication could imply a novel router, making bounded prior-art search necessary.",
+    "assessment": "near-match-found",
+    "stop_reason": "decisive-match",
+    "saturation_round_ids": [],
+    "languages": ["English", "Simplified Chinese"],
+    "regions": ["global public web", "GitHub", "arXiv"],
+    "access_gaps": [
+      {"resource": "paid patent and market databases", "impact": "No patentability or exhaustive-market claim can be made.", "critical": false},
+      {"resource": "private and unindexed repositories", "impact": "No exhaustive implementation census can be made.", "critical": false}
+    ],
+    "scope_statement": "Public evidence as of 2026-08-25 establishes multiple near-match routers and routing research; no first, unique, patentability, or exhaustive-market claim is made."
+  },
+  "perspectives": [
+    {
+      "id": "P1", "lens": "independent deterministic release validation", "producer": "package privacy validator", "producer_type": "tool", "producer_reference": "scripts/validate_package.py", "independent": true, "context_isolated": true, "provenance_source_id": "I4", "source_ids": ["I3", "I4"], "findings": ["Required release files and lifecycle entrypoints are present.", "Configured public-text privacy patterns and research-tree exclusion passed."], "limitations": "Pattern validation does not replace human security review."
+    },
+    {
+      "id": "P2", "lens": "external telemetry standard", "producer": "OpenTelemetry authors", "producer_type": "external-team", "producer_reference": "https://opentelemetry.io/docs/specs/semconv/", "independent": false, "context_isolated": true, "source_ids": ["E7", "E8"], "findings": ["Usage counts can be separated from content.", "Privacy-risk fields should require informed opt-in."], "limitations": "The standard does not review this codebase's re-identification risk."
+    },
+    {
+      "id": "P3", "lens": "decision owner and high-usage Codex user", "producer": "current user", "producer_type": "human", "producer_reference": "current instruction dated 2026-08-25", "independent": false, "context_isolated": false, "source_ids": ["I1"], "findings": ["Weekly sustainability is more urgent than a paper.", "Uncertainty creates an emotional xhigh default.", "Real-project evidence is preferred over assumed multipliers."], "limitations": "One user and no longitudinal dataset yet."
+    }
+  ],
+  "real_world_validations": [
+    {"id": "V1", "role": "decision owner and intended first user", "participant_reference": "current user instruction dated 2026-08-25", "method": "written selection of telemetry-first collection, independent publication, redaction, and end-to-end execution", "conducted_at": "2026-08-25", "outcome": "Direction accepted and paper deferred.", "limitations": "Validates scope, not code quality or model effects.", "status": "completed", "evidence_source_ids": ["I1"]},
+    {"id": "V2", "role": "synthetic command-line user", "participant_reference": "tests/test_telemetry_cli.py", "method": "isolated enable, start, finish, status, snapshot, and purge lifecycle", "conducted_at": "2026-08-25", "outcome": "Lifecycle passed and snapshot omitted workspace text and stable identifiers.", "limitations": "Does not substitute for real adoption or security review.", "status": "completed", "evidence_source_ids": ["I3"]}
+  ],
+  "alignment_questions": [
+    {"id": "AQ1", "question": "Use AIALRA-0/model-effort-router as the canonical repository name?", "decision_changing": false, "status": "defaulted", "default_value": "Use the exact Skill name because the target did not exist."},
+    {"id": "AQ2", "question": "Backfill the partially observed current task?", "decision_changing": false, "status": "defaulted", "default_value": "Do not backfill; start with the next task recorded before its first modification."}
+  ],
+  "recommendation": {
+    "verdict": "reframe",
+    "action": "Publish and install v0.2.0 as a telemetry-first pilot, enable local-only collection, and start real data on the next complete iteration; defer the paper and comparisons.",
+    "rationale": "The router is useful but v0.1 overstates its observation loop; close prior art makes routing non-unique; a consented content-free lifecycle is the minimum next step.",
+    "strongest_counterevidence": "Skill-triggered observations are selected by task and user behavior, so route outcome rates remain confounded after count gates.",
+    "minimum_test": "Pass a synthetic lifecycle and one next-project real lifecycle, then inspect records and snapshots for prohibited content and identifiers.",
+    "failure_response": "Disable collection, retain or purge by user choice, fix the lifecycle, and restart without publishing comparisons.",
+    "reversal_condition": "Pause if sensitive content appears, runs cannot close, deletion control fails, or independent review finds material re-identification risk.",
+    "support_source_ids": ["I1", "I2", "I3", "E2", "E3", "E4", "E7", "E8"],
+    "counter_source_ids": ["E5", "E6", "E7"]
+  },
+  "review_triggers": [
+    "50 accepted or rejected runs",
+    "3 project pseudonyms",
+    "14 active days",
+    "2 actual routes with at least 10 runs each",
+    "Any prohibited content or stable snapshot identifier",
+    "More than 10 percent of completed work lacks a finish record",
+    "A host update changes model names, effort levels, or usage definitions",
+    "Independent privacy review produces repository-specific findings"
+  ]
+}

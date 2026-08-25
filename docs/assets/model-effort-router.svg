@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title description">
+  <title id="title">Model Effort Router</title>
+  <desc id="description">A privacy-first flow from real project observations to evidence-based model routing.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#172554"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="360" rx="28" fill="url(#background)"/>
+  <circle cx="1040" cy="80" r="118" fill="#1e3a8a" opacity="0.32"/>
+  <circle cx="1120" cy="300" r="170" fill="#581c87" opacity="0.24"/>
+  <path d="M82 101h80l30 38h80l32 40h82" fill="none" stroke="url(#accent)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="82" cy="101" r="18" fill="#22d3ee"/>
+  <circle cx="192" cy="139" r="18" fill="#67e8f9"/>
+  <circle cx="304" cy="179" r="18" fill="#a78bfa"/>
+  <circle cx="386" cy="179" r="18" fill="#c4b5fd"/>
+  <text x="82" y="252" fill="#f8fafc" font-family="Segoe UI, Arial, sans-serif" font-size="58" font-weight="700">Model Effort Router</text>
+  <text x="84" y="306" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="27">Observe real work · protect context · route with evidence</text>
+  <g transform="translate(850 132)" font-family="Segoe UI, Arial, sans-serif" font-weight="700" text-anchor="middle">
+    <rect x="0" y="0" width="84" height="48" rx="24" fill="#0e7490"/>
+    <text x="42" y="32" fill="#ecfeff" font-size="20">Luna</text>
+    <rect x="96" y="0" width="94" height="48" rx="24" fill="#4338ca"/>
+    <text x="143" y="32" fill="#eef2ff" font-size="20">Terra</text>
+    <rect x="202" y="0" width="80" height="48" rx="24" fill="#7e22ce"/>
+    <text x="242" y="32" fill="#faf5ff" font-size="20">Sol</text>
+  </g>
+</svg>

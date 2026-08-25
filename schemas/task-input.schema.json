@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/AIALRA-0/model-effort-router/main/schemas/task-input.schema.json",
+  "title": "Next iteration routing input",
+  "type": "object",
+  "required": [
+    "phase"
+  ],
+  "properties": {
+    "phase": {
+      "type": "string"
+    },
+    "preference": {
+      "enum": [
+        "quality_first",
+        "guarded_high",
+        "balanced"
+      ],
+      "default": "guarded_high"
+    },
+    "goal": {
+      "type": "string"
+    },
+    "non_goals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acceptance_checks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ambiguity": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "default": 2
+    },
+    "complexity": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "default": 2
+    },
+    "blast_radius": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "default": 1
+    },
+    "irreversibility": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "default": 1
+    },
+    "verification_strength": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "default": 2
+    },
+    "evidence_conflict": {
+      "type": "boolean",
+      "default": false
+    },
+    "failed_hypotheses": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "cross_module": {
+      "type": "boolean",
+      "default": false
+    },
+    "public_interface_change": {
+      "type": "boolean",
+      "default": false
+    },
+    "security_or_data_boundary": {
+      "type": "boolean",
+      "default": false
+    },
+    "deployment_topology_change": {
+      "type": "boolean",
+      "default": false
+    },
+    "final_red_team": {
+      "type": "boolean",
+      "default": false
+    },
+    "host_can_switch": {
+      "type": "boolean",
+      "default": false
+    },
+    "host_switch_confirmed": {
+      "type": "boolean",
+      "default": false
+    },
+    "stop_conditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

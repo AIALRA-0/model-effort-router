@@ -1,0 +1,33 @@
+{
+  "version": "2026-08-25",
+  "currency": "ChatGPT credits per 1M tokens",
+  "source": "https://learn.chatgpt.com/docs/pricing",
+  "models": {
+    "sol": {
+      "display_name": "GPT-5.6 Sol",
+      "host_model_id": "gpt-5.6-sol",
+      "input": 100.0,
+      "cached_input": 10.0,
+      "output": 500.0
+    },
+    "terra": {
+      "display_name": "GPT-5.6 Terra",
+      "host_model_id": "gpt-5.6-terra",
+      "input": 50.0,
+      "cached_input": 5.0,
+      "output": 300.0
+    },
+    "luna": {
+      "display_name": "GPT-5.6 Luna",
+      "host_model_id": "gpt-5.6-luna",
+      "input": 5.0,
+      "cached_input": 0.5,
+      "output": 30.0
+    }
+  },
+  "notes": [
+    "GPT Pro web/deep-research phases are tracked separately because this catalog prices GPT-5.6 token usage",
+    "Output tokens should include billed reasoning tokens when the host reports them",
+    "Reasoning effort does not have a universal multiplier and must be measured per workload"
+  ]
+}
