@@ -15,7 +15,7 @@
   "decision_problem": {
     "project_classification": "reversible public developer-tool pilot with local privacy-sensitive metadata",
     "risk_level": "high because public release and longitudinal observation can create privacy and evidence-quality harm",
-    "decision_owner": "the user and GitHub repository owner AIALRA-0",
+    "decision_owner": "the user and GitHub repository owner ExampleOrg-0",
     "desired_outcome": "Collect enough consented real-project metadata for a later whole-machine analysis without premature model claims.",
     "current_state": "v0.1 has a deterministic router and manual analyzer but no automatic consented start-finish lifecycle or de-identified machine snapshot.",
     "decision": "Whether to publish an independent telemetry-first Skill now and postpone research conclusions until review gates are reached.",
@@ -114,7 +114,7 @@
       "id": "I4", "origin": "internal", "title": "Deterministic package and privacy validator output", "location": "tool:scripts/validate_package.py/2026-08-25", "source_type": "agent-artifact", "retrieval_method": "isolated deterministic validator execution", "observed_content": "The validator checked required release files, research-tree exclusion, public-text redaction patterns, collection policy, Skill lifecycle commands, and CI presence and returned passed.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Provides a context-isolated tool perspective on release invariants.", "limitations": "Pattern scanning cannot prove that no sensitive meaning is present or replace human security review.", "direct": true, "independence_group": "deterministic-package-validator"
     },
     {
-      "id": "E1", "origin": "external", "title": "Codex-Switcher-Web pull request 1", "location": "https://github.com/AIALRA-0/Codex-Switcher-Web/pull/1", "source_type": "source-code", "retrieval_method": "GitHub CLI detail and file inventory", "observed_content": "The open mergeable pull request has 19 commits, 19 added files, 2,224 additions, and no telemetry lifecycle.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Confirms public predecessor scope.", "limitations": "May change later.", "direct": true, "independence_group": "predecessor-public"
+      "id": "E1", "origin": "external", "title": "Codex-Switcher-Web pull request 1", "location": "https://github.com/ExampleOrg-0/Codex-Switcher-Web/pull/1", "source_type": "source-code", "retrieval_method": "GitHub CLI detail and file inventory", "observed_content": "The open mergeable pull request has 19 commits, 19 added files, 2,224 additions, and no telemetry lifecycle.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Confirms public predecessor scope.", "limitations": "May change later.", "direct": true, "independence_group": "predecessor-public"
     },
     {
       "id": "E2", "origin": "external", "title": "Using GPT-5.6", "location": "https://developers.openai.com/api/docs/guides/latest-model", "source_type": "official-doc", "retrieval_method": "direct official web retrieval", "observed_content": "OpenAI presents model and reasoning choices as workload-dependent and medium as a baseline adjusted by evaluation.", "date": "2026-08-25", "accessed_at": "2026-08-25", "applicability": "Supports evidence-gated routing.", "limitations": "Does not quantify local projects or subscription credits.", "direct": true, "independence_group": "openai"
@@ -212,7 +212,7 @@
     {"id": "V2", "role": "synthetic command-line user", "participant_reference": "tests/test_telemetry_cli.py", "method": "isolated enable, start, finish, status, snapshot, and purge lifecycle", "conducted_at": "2026-08-25", "outcome": "Lifecycle passed and snapshot omitted workspace text and stable identifiers.", "limitations": "Does not substitute for real adoption or security review.", "status": "completed", "evidence_source_ids": ["I3"]}
   ],
   "alignment_questions": [
-    {"id": "AQ1", "question": "Use AIALRA-0/model-effort-router as the canonical repository name?", "decision_changing": false, "status": "defaulted", "default_value": "Use the exact Skill name because the target did not exist."},
+    {"id": "AQ1", "question": "Use ExampleOrg-0/model-effort-router as the canonical repository name?", "decision_changing": false, "status": "defaulted", "default_value": "Use the exact Skill name because the target did not exist."},
     {"id": "AQ2", "question": "Backfill the partially observed current task?", "decision_changing": false, "status": "defaulted", "default_value": "Do not backfill; start with the next task recorded before its first modification."}
   ],
   "recommendation": {

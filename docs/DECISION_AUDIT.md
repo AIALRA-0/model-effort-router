@@ -107,7 +107,7 @@ OpenTelemetry 的生成式人工智能字段同时包含 token 用量和可能�
 
 ## 10 参考资料
 
-[1] AIALRA-0, “Add model-effort router skill,” GitHub pull request #1, 2026. [Online]. Available: https://github.com/AIALRA-0/Codex-Switcher-Web/pull/1
+[1] ExampleOrg-0, “Add model-effort router skill,” GitHub pull request #1, 2026. [Online]. Available: https://github.com/ExampleOrg-0/Codex-Switcher-Web/pull/1
 
 [2] OpenAI, “Using GPT-5.6,” OpenAI Developer Documentation, 2026. [Online]. Available: https://developers.openai.com/api/docs/guides/latest-model
 

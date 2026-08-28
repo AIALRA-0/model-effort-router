@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/AIALRA-0/model-effort-router/main/schemas/telemetry-record.schema.json",
+  "$id": "https://raw.githubusercontent.com/ExampleOrg-0/model-effort-router/main/schemas/telemetry-record.schema.json",
   "title": "Privacy-preserving model route telemetry record",
   "type": "object",
   "required": [

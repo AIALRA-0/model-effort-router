@@ -29,7 +29,7 @@ REQUIRED_FILES = [
 ]
 PUBLIC_TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".json", ".txt"}
 SENSITIVE_PATTERNS = {
-    "WINDOWS_ABSOLUTE_PATH": re.compile(r"(?i)\b[A-Z]:\\(?:Users|AIALRA|home|workspace)\\"),
+    "WINDOWS_ABSOLUTE_PATH": re.compile(r"(?i)\b[A-Z]:\\(?:Users|ExampleOrg|home|workspace)\\"),
     "UNIX_HOME_PATH": re.compile(r"/(?:Users|home)/[A-Za-z0-9._-]+/"),
     "OPENAI_STYLE_SECRET": re.compile(r"\b(?:sk|gho|github_pat)_[A-Za-z0-9_-]{12,}\b"),
     "PRIVATE_IPV4": re.compile(r"\b(?:10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.)\d{1,3}\.\d{1,3}\b"),

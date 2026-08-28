@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/AIALRA-0/model-effort-router/schemas/history-audit-record.schema.json",
+  "$id": "https://github.com/ExampleOrg-0/model-effort-router/schemas/history-audit-record.schema.json",
   "title": "Privacy-preserving Codex history audit record",
   "type": "object",
   "required": ["schema_version", "session_id", "turn_id", "project_id", "actual", "mixed_route", "classification"],
