@@ -133,8 +133,38 @@ python scripts/telemetry.py finish --run-id <run-id> --workspace . --status acce
 
 在达到配置门槛前，校准状态保持 `policy_based_uncalibrated`，不生成模型胜率、因果结论或论文结论
 
+### 6.1 本地历史审计
+
+用户明确要求审计本机 Codex 历史时，使用 `scripts/history_audit.py`
+
+完整纵向运行：
+
+```powershell
+# 输出目录必须位于公开仓库外
+python scripts/history_audit.py run --output-dir <private-output-directory> --pretty
+```
+
+必须遵守以下边界：
+
+- 源 JSONL 只读，运行前后核对来源数量、大小和修改时间
+- 同一 session 与 turn 的迁移、归档和 fork 观察只计一次
+- 每轮只使用最后一个累计 token 快照，再减去同一 session 上一轮快照
+- 原始提示词、回复、代码、日志、文件名、路径、URL、邮箱、账号和秘密不得进入派生文件
+- 原文只允许在内存中参与确定性分类，落盘摘要只使用固定标签
+- `likely_overrouted` 是历史疑似过度路由，不能写成已经验证的低路线结论
+- `lower_route_validated` 只能来自通过质量门的前瞻可比较样本
+
+建立试运行：
+
+```powershell
+python scripts/history_audit.py prospective --action init --output-dir <private-output-directory> --pretty
+```
+
+试运行出现严重缺陷、范围违规或降档回归时，受影响任务类别恢复上一档并进入人工复核
+
 ## 7 进一步阅读
 
 - 模型、推理档位和硬门：`references/routing-policy.md`
 - 采集字段、保存边界和删除路径：`references/telemetry-policy.md`
 - 真实项目观察与整机分析准备：`references/observation-protocol.md`
+- 本地历史清点、派生字段和解释边界：`references/history-audit-policy.md`

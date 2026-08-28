@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AIALRA-0/model-effort-router/schemas/history-audit-record.schema.json",
+  "title": "Privacy-preserving Codex history audit record",
+  "type": "object",
+  "required": ["schema_version", "session_id", "turn_id", "project_id", "actual", "mixed_route", "classification"],
+  "properties": {
+    "schema_version": {"const": "0.3.0"},
+    "session_id": {"type": "string", "pattern": "^[a-f0-9]{24}$"},
+    "turn_id": {"type": "string", "pattern": "^[a-f0-9]{24}$"},
+    "project_id": {"type": "string", "pattern": "^[a-f0-9]{24}$"},
+    "actual": {
+      "type": "object",
+      "required": ["model", "effort"],
+      "properties": {"model": {"type": "string"}, "effort": {"type": "string"}}
+    },
+    "mixed_route": {"type": "boolean"},
+    "tokens": {"type": ["object", "null"]},
+    "classification": {
+      "type": "object",
+      "required": ["domain", "phase", "execution_shape", "risk", "verification_strength", "sol_need", "confidence", "redacted_summary"],
+      "properties": {
+        "sol_need": {"enum": ["sol_required", "sol_useful_unproven", "likely_overrouted", "lower_route_validated", "indeterminate"]},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    }
+  }
+}

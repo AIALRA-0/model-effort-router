@@ -23,10 +23,18 @@
       "input": 5.0,
       "cached_input": 0.5,
       "output": 30.0
+    },
+    "gpt-5.5": {
+      "display_name": "GPT-5.5",
+      "host_model_id": "gpt-5.5",
+      "input": 125.0,
+      "cached_input": 12.5,
+      "output": 750.0
     }
   },
   "notes": [
     "GPT Pro web/deep-research phases are tracked separately because this catalog prices GPT-5.6 token usage",
+    "Cached input tokens are a subset of total input tokens and must not also be charged at the uncached input rate",
     "Output tokens should include billed reasoning tokens when the host reports them",
     "Reasoning effort does not have a universal multiplier and must be measured per workload"
   ]

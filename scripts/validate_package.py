@@ -22,7 +22,10 @@ REQUIRED_FILES = [
     "references/telemetry-policy.md",
     "scripts/recommend.py",
     "scripts/telemetry.py",
+    "scripts/history_audit.py",
     "schemas/telemetry-record.schema.json",
+    "schemas/history-audit-record.schema.json",
+    "references/history-audit-policy.md",
 ]
 PUBLIC_TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".json", ".txt"}
 SENSITIVE_PATTERNS = {

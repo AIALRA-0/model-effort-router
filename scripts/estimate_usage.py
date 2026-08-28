@@ -14,6 +14,7 @@ MODEL_ALIASES = {
     "gpt-5.6-sol": "sol",
     "gpt-5.6-terra": "terra",
     "gpt-5.6-luna": "luna",
+    "gpt-5.5": "gpt-5.5",
 }
 
 
@@ -101,6 +102,8 @@ def estimate(scenario: dict[str, Any], catalog: dict[str, Any]) -> dict[str, Any
         model = normalize_model(task.get("model"))
         effort = str(task.get("effort", "unspecified"))
         input_tokens, cached_tokens, output_tokens, assumed = task_tokens(task)
+        if cached_tokens > input_tokens:
+            raise UsageError(f"tasks[{index}].cached_input_tokens cannot exceed input_tokens")
 
         if model not in catalog["models"]:
             unpriced.append({
@@ -113,8 +116,9 @@ def estimate(scenario: dict[str, Any], catalog: dict[str, Any]) -> dict[str, Any
             continue
 
         rate = catalog["models"][model]
+        uncached_tokens = input_tokens - cached_tokens
         credits_each = (
-            input_tokens / 1_000_000 * float(rate["input"])
+            uncached_tokens / 1_000_000 * float(rate["input"])
             + cached_tokens / 1_000_000 * float(rate["cached_input"])
             + output_tokens / 1_000_000 * float(rate["output"])
         )
@@ -128,6 +132,7 @@ def estimate(scenario: dict[str, Any], catalog: dict[str, Any]) -> dict[str, Any
             "effort": effort,
             "count": count,
             "input_tokens_each": input_tokens,
+            "uncached_input_tokens_each": uncached_tokens,
             "cached_input_tokens_each": cached_tokens,
             "output_tokens_each": output_tokens,
             "credits_each": round(credits_each, 6),

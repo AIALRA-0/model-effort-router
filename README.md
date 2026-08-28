@@ -1,201 +1,196 @@
 <p align="center">
-  <img src="docs/assets/model-effort-router.svg" alt="Model Effort Router：先观测真实执行，再决定模型与推理档位" width="880">
+  <img src="docs/assets/model-effort-router.svg" alt="Model Effort Router：为下一段任务选择最低充分路线，并在本机审计真实用量" width="880">
 </p>
 
 <p align="center">
-  <a href="README.en.md">English</a> ·
-  <a href="SECURITY.md">安全与隐私</a> ·
-  <a href="CHANGELOG.md">变更记录</a>
+  <a href="README.en.md">English</a> · <a href="SECURITY.md">安全与隐私</a> · <a href="CHANGELOG.md">变更记录</a>
 </p>
 
 # Model Effort Router
 
-一个面向 Codex 长流程项目的模型与推理档位路由 Skill。当前版本先收集经用户同意的真实执行统计，再用本机数据回答 Sol、Terra、Luna 以及 medium、high、xhigh 在不同任务上的质量、返工和消耗差异。
+一个面向 Codex 长流程项目的模型与推理档位路由 Skill
 
-当前版本：`0.2.1`。当前阶段：公开试点，不构建研究论文，也不宣称已经证明某个模型更优。
+它在每轮交付后只给出下一段任务和建议路线，同时用本机数据回答三个问题：Sol 是否真的必要、Terra 或 Luna 能否稳定接管后续迭代、周额度被哪些任务和档位消耗
 
-## 1 项目为什么存在
+当前版本：`0.3.0`
 
-长期把 Sol xhigh 当成安全默认值，会让高成本推理覆盖调查、实现、测试、修复和机械整理等性质不同的工作。反过来，仅凭主观印象降低档位，也容易把偶发失败误判成稳定差距。
+当前状态：历史审计、逐轮记录和 14 个活跃日前瞻试运行均已实现，模型因果差异仍未验证
 
-本项目把这两个问题拆开：路由器给下一轮提出可解释建议，遥测工具记录最终实际路线和可验证结果。积累达到复核门槛后，再生成不含项目身份的整机汇总快照。
+## 它解决什么问题
 
-## 2 当前工作流
+长期把 Sol xhigh 当成心理保险，会让调查、实现、测试、修正和机械整理共享同一条高成本路线
+
+仅凭主观印象降档也不可靠，因为任务难度、上下文、验证强度和用户纠偏都会影响结果
+
+| 闭环 | 输入 | 输出 | 用途 |
+| --- | --- | --- | --- |
+| 下一轮路由 | 项目阶段、风险、验证能力和失败证据 | 一个具体下一段与一个精确模型档位 | 避免每轮都使用 Sol xhigh |
+| 本机证据 | 经授权的运行结果或本地 Codex JSONL | 去标识轮次、覆盖清单、审计报告和试运行状态 | 区分真实需求、疑似过度路由和证据不足 |
+
+## 工作流
 
 ```mermaid
 flowchart TD
-    A[用户明确启用本地采集] --> B[任务开始时记录计划路线与任务分类]
-    B --> C[Codex 执行、测试与修正]
-    C --> D[任务结束时记录实际路线与验收结果]
-    D --> E[只在本机追加结构化记录]
-    E --> F{达到复核门槛?}
-    F -- 否 --> G[继续积累，不下统计结论]
-    F -- 是 --> H[生成去标识整机快照]
-    H --> I[再决定是否开展对照分析或研究]
+    A[用户任务] --> B[建立最小任务合同]
+    B --> C[推荐最低充分路线]
+    C --> D[执行、测试与验收]
+    D --> E[只记录去标识结果]
+    E --> F[交付下一段与建议模型]
+    G[本地 Codex JSONL] --> H[只读清点与增量提取]
+    H --> I[确定性分类与疑难队列]
+    I --> J[历史审计报告]
+    J --> K[14 个活跃日前瞻试运行]
+    K --> L[达到门槛后复审路由政策]
 ```
 
-图 1 真实项目观测与后续分析流程
+图 1　实时路由与历史审计共享同一套质量门
 
-### 2.1 默认对话收尾
+## 默认对话收尾
 
-Skill 在每轮正常交付末尾只追加下一段任务和建议路线
-
-模型名称保留官方写法，不使用中文音译
+每轮正常交付末尾只追加两行
 
 ```text
 下一段：为失败路径增加回归测试
 建议模型：Terra medium
 ```
 
-任务合同、路由理由、备选方案和遥测状态默认留在内部，用户主动询问时再展开
+模型名称始终使用 `GPT Pro`、`Sol`、`Terra` 和 `Luna`
 
-## 3 隐私边界
+路由理由、备选路线、运行标识和采集状态默认不展示，用户明确询问时再展开
 
-采集默认关闭。启用后，工具也不会保存提示词、回复正文、源代码、补丁、日志、文件名、文件路径、仓库远程地址、Git 分支名、提交信息、用户名或电子邮件。
+## 安装
 
-本地原始记录只包含固定枚举、计数、布尔验收结果、时间戳，以及使用本机随机盐生成的项目和机器伪标识。公开快照会进一步移除伪标识和精确时间；样本少于 5 次的分组只显示样本量，不显示成功率和缺陷率。
-
-完整字段与威胁边界见 [遥测政策](references/telemetry-policy.md) 和 [安全政策](SECURITY.md)。
-
-## 4 安装
-
-仓库提供安装脚本，先预览目标，再复制运行所需文件。
+需要 Python 3.10 或更高版本，运行时只使用 Python 标准库
 
 ```powershell
-# 第一步：预览安装目标，不修改本机 Skill 目录。
 python scripts/install_skill.py --dry-run
-
-# 第二步：确认目标正确后安装。
-python scripts/install_skill.py
+python scripts/install_skill.py --replace
 ```
 
-默认安装位置是 Codex Home 下的 `skills/model-effort-router`。脚本不会复制测试、审计资料或本地遥测数据。
+首次安装可以省略 `--replace`，更新已安装版本时保留该参数
 
-## 5 第一次启用
+安装不会自动启用统计，也不会读取历史
 
-安装本身不会启动采集。用户需要单独确认本地采集政策。
+## 第一次成功：只读审计本地历史
+
+输出目录必须位于仓库外，下面示例使用当前账户的本机应用数据目录
 
 ```powershell
-# 第一步：显示将要接受的隐私边界和数据目录。
+$privateOutput = Join-Path $env:LOCALAPPDATA "model-effort-router\history-analysis"
+python scripts/history_audit.py run --output-dir "$privateOutput" --pretty
+```
+
+一次 `run` 顺序执行完整流水线
+
+| 命令 | 结果 |
+| --- | --- |
+| `inventory` | 列出发现、可读、失败和来源类型，不保存源路径 |
+| `extract` | 按 session 与 turn 去重，提取实际路线和累计 token 增量 |
+| `classify` | 使用本地确定性规则生成多轴任务标签，模型调用为 0 |
+| `review` | 只输出低置信度、高风险、混合路线和会改变政策的疑难项 |
+| `report` | 汇总覆盖、路线、effort、token、credits、行为模式和反事实估算 |
+| `prospective` | 建立并检查 14 个活跃日的可回滚试运行 |
+
+第二次运行会复用未变化来源的私有派生缓存，只重读新增或修改过的 JSONL
+
+逐项解释见 [历史审计政策](references/history-audit-policy.md)
+
+## 在真实任务中记录结果
+
+本地逐轮采集默认关闭
+
+```powershell
 python scripts/telemetry.py enable --pretty
-
-# 第二步：查看当前授权状态和积累进度。
-python scripts/telemetry.py status --pretty
+python scripts/telemetry.py start --workspace . --policy guarded_high --task-class routine_implementation --recommended-model terra --recommended-effort medium --actual-model terra --actual-effort medium --context-mode continued --pretty
+python scripts/telemetry.py finish --run-id RUN_ID --workspace . --status accepted --tests-run 5 --tests-passed 5 --tests-failed 0 --token-source unavailable --pretty
 ```
 
-随时可以停止后续写入：
+宿主没有提供 token 或工具调用计数时保持 `null`，不会用字符数猜测，也不会用零冒充实测
+
+## 前瞻试运行
 
 ```powershell
-# 停止新的遥测记录，保留既有本地数据供用户检查。
-python scripts/telemetry.py disable --pretty
+$privateOutput = Join-Path $env:LOCALAPPDATA "model-effort-router\history-analysis"
+python scripts/history_audit.py prospective --action init --output-dir "$privateOutput" --pretty
+python scripts/history_audit.py prospective --action status --output-dir "$privateOutput" --pretty
 ```
 
-## 6 在真实任务中记录
+第一次政策复审需要至少 50 次完成记录、3 个项目、14 个活跃日、2 条可比较路线，并且每条路线至少 10 次
 
-Skill 会把记录动作纳入固定生命周期。任务开始命令返回 `run_id`；结束时必须使用同一个标识。
+这些数字只触发复审，不代表统计显著性
 
-```powershell
-# 开始一次常规实现任务；workspace 只用于生成本机伪标识，不会写入记录。
-python scripts/telemetry.py start --workspace . --policy guarded_high --task-class routine_implementation --recommended-model terra --recommended-effort medium --actual-model terra --actual-effort medium --context-mode compressed_handoff --pretty
+出现严重缺陷、范围违规或降档回归时，受影响任务类别立即回到上一档并进入人工复核
 
-# 任务完成后写入实际路线和验收结果；把 RUN_ID 替换为开始命令返回的值。
-python scripts/telemetry.py finish --run-id RUN_ID --workspace . --status accepted --tests-run 5 --tests-passed 5 --tests-failed 0 --rework-minutes 12 --token-source unavailable --pretty
-```
+## 默认路由矩阵
 
-宿主没有提供 token 或工具调用计数时，字段保持 `null`。工具不会用字符数猜测 token，也不会把未知值写成零。
+| 下一段任务 | 建议路线 |
+| --- | --- |
+| 重要外部调查 | GPT Pro |
+| 架构收敛和高影响裁决 | Sol high |
+| 命中硬门的不可逆裁决或两个独立假设失败 | Sol xhigh |
+| 日常实现 | Terra medium |
+| 跨模块复杂实现 | Terra high |
+| 目标冻结但细节复杂 | Terra xhigh |
+| 翻译、格式转换、批量整理和固定测试 | Luna medium |
 
-## 7 路由预设
+`xhigh` 不是心理保险，只有证据冲突、两个不同假设失败、高不可逆弱验证、安全或数据边界改变、最终高价值红队等硬门才升级
 
-表 1 三种预设的适用范围
+## 隐私与信任边界
 
-<div align="center">
+- 原始 JSONL 原地只读，分析器不会复制或改写历史
+- 提示词、回复、代码、补丁、日志、文件名、路径、URL、邮箱、账号和秘密不进入派生记录
+- 原文只在进程内存中短暂参与确定性分类，落盘摘要由固定分类标签组成
+- session、turn 和 project 使用本机随机盐生成 HMAC 化名
+- 混合路线保留总用量，但排除在公平路线比较之外
+- ChatGPT 对话缺少模型与 token 元数据时，只参与行为画像，不参与模型成本比较
+- 公开仓库只包含通用代码、合成测试和空白政策，不包含个人统计
 
-| 预设 | 适用场景 | 核心约束 |
-| --- | --- | --- |
-| `quality_first` | 首轮架构、不可逆决策、最终红队审查 | 允许 Sol xhigh，但每次都要求高风险证据 |
-| `guarded_high` | 一般长期项目的建议默认值 | 常规实现从 Terra medium 或 high 开始，失败触发升级 |
-| `balanced` | 低风险、强验证、批量工作 | 优先 Terra 或 Luna，把 Sol 留给裁决与高风险任务 |
+完整边界见 [遥测政策](references/telemetry-policy.md)、[历史审计政策](references/history-audit-policy.md) 和 [安全政策](SECURITY.md)
 
-</div>
-
-推荐下一轮路线：
-
-```powershell
-# 根据结构化任务合同生成下一轮模型和推理档位建议。
-python scripts/recommend.py --input config/example-task.json --pretty
-```
-
-`xhigh` 不是心理保险。只有架构仍未收敛、两个独立假设均失败、安全或数据边界变化、跨模块且验证能力弱、最终红队审查等证据出现时，路由器才建议升级。
-
-## 8 何时生成整机快照
-
-以下门槛是“值得复核”的运行条件，不代表统计显著性：完成运行至少 50 次、覆盖至少 3 个项目、跨越至少 14 个活跃日、至少比较 2 条路线，并且每条被比较路线至少 10 次。
+## 验证
 
 ```powershell
-# 查看是否达到复核门槛以及各项差距。
-python scripts/telemetry.py status --pretty
-
-# 达到门槛后生成去标识快照；OUTPUT_PATH 应位于用户选择的安全目录。
-python scripts/telemetry.py snapshot --output OUTPUT_PATH --pretty
-```
-
-快照仍然只是观察性描述。不同任务难度、Skill 调用选择和宿主可见字段会造成偏差。要比较 high 与 xhigh 的因果差异，仍需另行授权并设计配对或随机交叉实验。
-
-## 9 停止采集和删除数据
-
-```powershell
-# 紧急停止本次进程及其子进程中的遥测写入。
-$env:MODEL_EFFORT_ROUTER_TELEMETRY = "off" # 在当前 PowerShell 会话中停止遥测写入。
-
-# 永久删除本地遥测目录；命令要求输入固定确认短语。
-python scripts/telemetry.py purge --confirm PURGE-LOCAL-TELEMETRY --pretty
-```
-
-删除无法撤销。执行前请先运行 `status`，确认显示的数据目录属于本项目。
-
-## 10 验证仓库
-
-```powershell
-# 验证 Skill 结构、隐私约束、文档和自动化入口。
 python scripts/validate_package.py
-
-# 运行全部单元测试和命令行端到端测试。
 python -m unittest discover -s tests -v
-
-# 验证 Python 文件能够编译。
 python -m compileall -q scripts tests
 ```
 
-项目运行时只依赖 Python 标准库，支持 Python 3.10 及以上版本。
+版本 `0.3.0` 验收覆盖 Python 3.10 至 3.13，并包含累计 token 跨轮差分、损坏 JSONL、混合路线、增量缓存、源文件零改写、隐私扫描和前瞻回退测试
 
-## 11 仓库结构
+历史观察只能说明发生过什么，不能证明模型造成了质量差异
+
+## 仓库结构
 
 ```text
 model-effort-router/
-├── SKILL.md                         # Skill 执行入口与固定生命周期。
-├── agents/openai.yaml               # Codex 展示信息与默认调用提示。
-├── config/                          # 路由目录、示例和观测门槛。
-├── schemas/                         # 输入、输出、结果和遥测 JSON Schema。
-├── scripts/                         # 路由、遥测、安装与验证工具。
-├── references/                      # 路由政策、遥测政策和观测协议。
-├── tests/                           # 单元测试与端到端测试。
-└── docs/                            # 决策审计和本地视觉资产。
+├── SKILL.md                         # 每轮交付协议与内部执行闭环
+├── scripts/history_audit.py         # 全量历史审计和前瞻试运行
+├── scripts/telemetry.py             # 经同意的逐轮本地记录
+├── scripts/recommend.py             # 确定性路由建议
+├── config/                          # 模型价格、示例和复审门槛
+├── schemas/                         # 路由、遥测和审计记录契约
+├── references/                      # 路由、隐私和观察政策
+├── tests/                           # 合成数据单元与端到端测试
+└── docs/                            # 决策审计和本地视觉资源
 ```
 
-## 12 当前证据边界
+## 证据边界
 
-公开仓库中的其他路由器已经说明“按任务选择模型”并非本项目首创。本项目当前聚焦于经用户同意、隐私最小化、可验证结束状态和整机复核门槛的闭环。详细结论审计见 [决策审计](docs/DECISION_AUDIT.md)。
+公开模型路由器早于本项目存在，因此本项目不声称首创
 
-在真实数据达到门槛前，本项目不会发布模型胜率、成本倍率或“最佳默认档位”结论。
+当前已经实现工具链和本机试运行，尚未验证 Sol、Terra 与 Luna 的因果质量差异，也不会把 `likely_overrouted` 写成已经证明的 `lower_route_validated`
 
-## 13 参与和许可
+详细决策边界见 [决策审计](docs/DECISION_AUDIT.md)
 
-提交问题前请阅读 [贡献指南](CONTRIBUTING.md)。安全或隐私问题请使用 GitHub 私密漏洞报告，不要在公开 Issue 中附带遥测记录。
+## 参与和许可
 
-项目采用 [MIT License](LICENSE)。
+提交修改前请阅读 [贡献指南](CONTRIBUTING.md)
 
-## 14 参考资料
+安全或隐私问题请使用 GitHub 私密漏洞报告，不要在公开 Issue 中附带本机派生记录
 
-[1] OpenAI, “Using GPT-5.6,” OpenAI Developer Documentation, 2026. [Online]. Available: https://developers.openai.com/api/docs/guides/latest-model
+项目采用 [MIT License](LICENSE)
 
-[2] OpenAI, “GPT-5.6,” OpenAI Developer Documentation, 2026. [Online]. Available: https://developers.openai.com/api/docs/models/gpt-5.6
+## 官方依据
+
+- [Codex App Server](https://learn.chatgpt.com/docs/app-server)
+- [Codex pricing](https://learn.chatgpt.com/docs/pricing)

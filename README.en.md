@@ -1,180 +1,194 @@
 <p align="center">
-  <img src="docs/assets/model-effort-router.svg" alt="Model Effort Router: observe real executions before choosing model and reasoning effort" width="880">
+  <img src="docs/assets/model-effort-router.svg" alt="Model Effort Router: choose the lowest sufficient route and audit actual local usage" width="880">
 </p>
 
 <p align="center">
-  <a href="README.md">简体中文</a> ·
-  <a href="SECURITY.md">Security and privacy</a> ·
-  <a href="CHANGELOG.md">Changelog</a>
+  <a href="README.md">简体中文</a> · <a href="SECURITY.md">Security and privacy</a> · <a href="CHANGELOG.md">Changelog</a>
 </p>
 
 # Model Effort Router
 
-A Codex Skill for routing long-running project work across model and reasoning-effort tiers. Version `0.2.1` is a public telemetry-first pilot: it gathers consented local execution statistics before making comparative claims about Sol, Terra, Luna, medium, high, or xhigh.
+A Codex Skill that recommends one concrete next segment and one exact model-effort route after every delivery
 
-## 1 Why this exists
+It also provides a local evidence loop for deciding whether Sol was necessary, whether Terra or Luna can sustain later iterations, and which routes consume the weekly allowance
 
-Using Sol xhigh as a universal safety default spends high-cost reasoning on work with very different risk profiles. Downgrading by intuition creates the opposite problem: isolated failures can look like stable capability gaps.
+Current version: `0.3.0`
 
-This project separates recommendation from evidence. The router proposes an explainable route for the next iteration. The telemetry lifecycle records the route actually used and the verified outcome. Only after explicit readiness gates are met can the user generate a de-identified whole-machine snapshot.
+Current status: history audit, per-run telemetry, and a reversible 14-active-day prospective trial are implemented; causal model-quality differences remain unverified
 
-## 2 Workflow
+## What it solves
+
+Using Sol xhigh as a psychological safety default sends research, implementation, testing, correction, and mechanical cleanup through the same expensive route
+
+Downgrading by intuition is unreliable too, because task difficulty, context, verification strength, and user correction all affect outcomes
+
+| Loop | Input | Output | Purpose |
+| --- | --- | --- | --- |
+| Next-route recommendation | Phase, risk, verification, and failure evidence | One concrete next segment and one exact route | Avoid universal Sol xhigh routing |
+| Local evidence | Consented outcomes or local Codex JSONL | Pseudonymized turns, coverage inventory, audit report, and trial status | Separate required Sol use, suspected over-routing, and missing evidence |
+
+## Workflow
 
 ```mermaid
 flowchart TD
-    A[User explicitly enables local collection] --> B[Start records task class and planned route]
-    B --> C[Codex executes, tests, and corrects]
-    C --> D[Finish records actual route and verified outcome]
-    D --> E[Append structured data locally]
-    E --> F{Readiness gates met?}
-    F -- No --> G[Keep collecting without comparative claims]
-    F -- Yes --> H[Generate a de-identified machine snapshot]
-    H --> I[Decide whether a controlled study is warranted]
+    A[User task] --> B[Minimal task contract]
+    B --> C[Lowest sufficient route]
+    C --> D[Execute, test, accept]
+    D --> E[Record de-identified outcome only]
+    E --> F[Deliver next segment and route]
+    G[Local Codex JSONL] --> H[Read-only inventory and incremental extraction]
+    H --> I[Deterministic classification and review queue]
+    I --> J[Historical audit report]
+    J --> K[14-active-day prospective trial]
+    K --> L[Review routing policy after gates pass]
 ```
 
-Figure 1. Real-project observation and later analysis flow
+Figure 1. Live routing and history audit share the same quality gates
 
-### 2.1 Default conversation footer
+## Default conversation footer
 
-At the end of each normal delivery, the Skill appends only one concrete next segment and one exact route. Model names remain `Sol`, `Terra`, and `Luna`.
+Every normal delivery ends with exactly two lines
 
 ```text
 下一段：Add a regression test for the failure path
 建议模型：Terra medium
 ```
 
-The task contract, route rationale, alternatives, and telemetry status stay internal unless the user asks for them.
+Model names remain `GPT Pro`, `Sol`, `Terra`, and `Luna`
 
-## 3 Privacy boundary
+Rationale, alternatives, run identifiers, and collection status remain hidden unless requested
 
-Collection is disabled by default. It never stores prompts, responses, source code, patches, logs, file names, file paths, remote URLs, branch names, commit messages, usernames, or email addresses.
+## Install
 
-Raw local records contain fixed categories, counts, boolean outcomes, timestamps, and project and machine pseudonyms derived with a machine-local random salt. Public snapshots remove even those pseudonyms and exact timestamps. Groups with fewer than five runs expose counts only, with rates suppressed.
-
-See the [telemetry policy](references/telemetry-policy.md) and [security policy](SECURITY.md) for the complete field and threat boundary.
-
-## 4 Install
+Python 3.10 or newer is required, with no runtime dependency outside the standard library
 
 ```powershell
-# Preview the exact destination without modifying the Codex Skill directory.
 python scripts/install_skill.py --dry-run
-
-# Install the runtime files after reviewing the destination.
-python scripts/install_skill.py
+python scripts/install_skill.py --replace
 ```
 
-Installation does not enable collection.
+`--replace` is optional for a first installation and required when updating an installed copy
 
-## 5 Enable collection
+Installation does not enable telemetry or read local history
+
+## First success: audit local history read-only
+
+The output directory must be outside the repository
 
 ```powershell
-# Review the policy and explicitly enable local collection.
+$privateOutput = Join-Path $env:LOCALAPPDATA "model-effort-router\history-analysis"
+python scripts/history_audit.py run --output-dir "$privateOutput" --pretty
+```
+
+| Command | Result |
+| --- | --- |
+| `inventory` | Accounts for readable, failed, and source-store entries without persisting paths |
+| `extract` | Deduplicates by session and turn, then derives actual routes and cumulative-token deltas |
+| `classify` | Applies local deterministic multi-axis rules with zero model calls |
+| `review` | Emits only low-confidence, high-risk, mixed-route, and policy-changing cases |
+| `report` | Aggregates coverage, routes, effort, tokens, credits, behavior, and counterfactual estimates |
+| `prospective` | Initializes and checks a reversible 14-active-day trial |
+
+Unchanged sources use a private derived cache on later runs
+
+See the [history audit policy](references/history-audit-policy.md) for interpretation limits
+
+## Record real task outcomes
+
+Per-run local collection is disabled by default
+
+```powershell
 python scripts/telemetry.py enable --pretty
-
+python scripts/telemetry.py start --workspace . --policy guarded_high --task-class routine_implementation --recommended-model terra --recommended-effort medium --actual-model terra --actual-effort medium --context-mode continued --pretty
+python scripts/telemetry.py finish --run-id RUN_ID --workspace . --status accepted --tests-run 5 --tests-passed 5 --tests-failed 0 --token-source unavailable --pretty
 ```
 
-Installation and enablement do not create a project observation.
+Unavailable token or tool-call counts remain `null`; the collector never guesses or substitutes zero
 
-## 6 Record a real task
+## Prospective trial
 
 ```powershell
-# Start a real routine-implementation observation.
-python scripts/telemetry.py start --workspace . --policy guarded_high --task-class routine_implementation --recommended-model terra --recommended-effort medium --actual-model terra --actual-effort medium --context-mode compressed_handoff --pretty
-
-# Finish the same observation using the run identifier returned by start.
-python scripts/telemetry.py finish --run-id RUN_ID --workspace . --status accepted --tests-run 5 --tests-passed 5 --tests-failed 0 --rework-minutes 12 --token-source unavailable --pretty
+$privateOutput = Join-Path $env:LOCALAPPDATA "model-effort-router\history-analysis"
+python scripts/history_audit.py prospective --action init --output-dir "$privateOutput" --pretty
+python scripts/history_audit.py prospective --action status --output-dir "$privateOutput" --pretty
 ```
 
-Unavailable token and tool-call counts remain `null`; the collector does not estimate them from text length.
+The first review requires 50 completed runs, 3 projects, 14 active days, 2 comparable routes, and 10 runs per route
 
-## 7 Routing presets
+These thresholds trigger review and do not claim statistical significance
 
-Table 1. Preset scope
+Any severe defect, scope violation, or downgrade regression immediately reverts the affected task class for manual review
 
-<div align="center">
+## Default routing matrix
 
-| Preset | Intended use | Main constraint |
-| --- | --- | --- |
-| `quality_first` | Architecture, irreversible decisions, final red-team review | Sol xhigh requires explicit high-risk evidence |
-| `guarded_high` | Recommended baseline for long-running projects | Routine implementation starts at Terra medium or high and escalates on evidence |
-| `balanced` | Low-risk work with strong verification | Prefer Terra or Luna and reserve Sol for adjudication |
+| Next segment | Recommended route |
+| --- | --- |
+| Important external research | GPT Pro |
+| Architecture convergence or high-impact adjudication | Sol high |
+| Hard-gate irreversible decision or two independent failed hypotheses | Sol xhigh |
+| Routine implementation | Terra medium |
+| Cross-module complex implementation | Terra high |
+| Frozen objective with complex detail | Terra xhigh |
+| Translation, formatting, bulk cleanup, or fixed tests | Luna medium |
 
-</div>
+`xhigh` is reserved for conflicting evidence, two failed independent hypotheses, high irreversibility with weak verification, security or data-boundary changes, and final high-value red-team review
 
-```powershell
-# Produce a deterministic next-iteration recommendation from a structured task contract.
-python scripts/recommend.py --input config/example-task.json --pretty
-```
+## Privacy and trust boundary
 
-## 8 Snapshot readiness
+- Source JSONL is read in place and never copied or modified
+- Prompts, responses, code, patches, logs, file names, paths, URLs, email addresses, accounts, and secrets never enter derived records
+- Source text exists only in memory during deterministic classification; persisted summaries use fixed labels
+- Session, turn, and project identifiers are HMAC pseudonyms derived with a machine-local salt
+- Mixed-route turns retain total usage but are excluded from fair route comparison
+- ChatGPT conversations without model and token metadata may inform behavior categories but never model-cost comparisons
+- The public repository contains generic code, synthetic tests, and blank policy only
 
-The default review gates are 50 completed runs, 3 projects, 14 active days, 2 compared routes, and 10 runs per compared route. These are operational review triggers, not a statistical-power claim.
+See the [telemetry policy](references/telemetry-policy.md), [history audit policy](references/history-audit-policy.md), and [security policy](SECURITY.md)
 
-```powershell
-# Show readiness and the remaining gap for each gate.
-python scripts/telemetry.py status --pretty
-
-# Generate a de-identified snapshot at a user-selected safe path.
-python scripts/telemetry.py snapshot --output OUTPUT_PATH --pretty
-```
-
-The snapshot remains observational. Task mix, Skill-selection effects, and host-visible fields can bias it. Causal high-versus-xhigh comparisons require a separately authorized paired or randomized crossover design.
-
-## 9 Stop or delete
+## Validate
 
 ```powershell
-# Stop future collection while retaining local records for inspection.
-python scripts/telemetry.py disable --pretty
-
-# Permanently remove the local telemetry directory after reviewing status.
-python scripts/telemetry.py purge --confirm PURGE-LOCAL-TELEMETRY --pretty
-```
-
-Deletion is irreversible.
-
-## 10 Validate
-
-```powershell
-# Validate package structure, privacy invariants, documentation, and automation entry points.
 python scripts/validate_package.py
-
-# Run unit and command-line end-to-end tests.
 python -m unittest discover -s tests -v
-
-# Verify that all Python sources compile.
 python -m compileall -q scripts tests
 ```
 
-The runtime uses only the Python standard library and supports Python 3.10 or newer.
+Version `0.3.0` is tested on Python 3.10 through 3.13, including cumulative-token deltas, damaged JSONL, mixed routes, cache reuse, zero source mutation, privacy scanning, and prospective rollback
 
-## 11 Repository structure
+Historical observation describes what happened and does not establish model causality
+
+## Repository structure
 
 ```text
 model-effort-router/
-├── SKILL.md                         # Skill lifecycle and routing contract.
-├── agents/openai.yaml               # Codex presentation metadata.
-├── config/                          # Routing examples and review gates.
-├── schemas/                         # Input, output, outcome, and telemetry schemas.
-├── scripts/                         # Routing, telemetry, installation, and validation.
-├── references/                      # Routing, telemetry, and observation policies.
-├── tests/                           # Unit and command-line lifecycle tests.
-└── docs/                            # Decision audit and local visual asset.
+├── SKILL.md                         # Delivery footer and internal execution loop
+├── scripts/history_audit.py         # Full history audit and prospective trial
+├── scripts/telemetry.py             # Consented per-run local records
+├── scripts/recommend.py             # Deterministic route recommendation
+├── config/                          # Model prices, examples, and review gates
+├── schemas/                         # Route, telemetry, and audit contracts
+├── references/                      # Routing, privacy, and observation policies
+├── tests/                           # Synthetic unit and end-to-end tests
+└── docs/                            # Decision audit and local visual asset
 ```
 
-## 12 Evidence boundary
+## Evidence boundary
 
-Public model routers predate this repository, so the project makes no “first” or “unique router” claim. Its present focus is a consented, privacy-minimized execution lifecycle with verified outcomes and explicit whole-machine readiness gates. See the [decision audit](docs/DECISION_AUDIT.md).
+Public model routers predate this project, so it makes no originality claim
 
-No model win rate, cost multiplier, or universal best-effort claim will be published before enough real observations exist.
+The toolchain and local trial are implemented, but causal quality differences between Sol, Terra, and Luna are not validated, and `likely_overrouted` is never presented as `lower_route_validated`
 
-## 13 Contributing and license
+See the [decision audit](docs/DECISION_AUDIT.md)
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. Report security and privacy issues through GitHub private vulnerability reporting; never attach raw telemetry to a public issue.
+## Contributing and license
 
-Licensed under the [MIT License](LICENSE).
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before contributing
 
-## 14 References
+Use GitHub private vulnerability reporting for security or privacy issues, and never attach local derived records to a public issue
 
-[1] OpenAI, “Using GPT-5.6,” OpenAI Developer Documentation, 2026. [Online]. Available: https://developers.openai.com/api/docs/guides/latest-model
+Licensed under the [MIT License](LICENSE)
 
-[2] OpenAI, “GPT-5.6,” OpenAI Developer Documentation, 2026. [Online]. Available: https://developers.openai.com/api/docs/models/gpt-5.6
+## Official references
+
+- [Codex App Server](https://learn.chatgpt.com/docs/app-server)
+- [Codex pricing](https://learn.chatgpt.com/docs/pricing)

@@ -80,8 +80,19 @@ class UsageTest(unittest.TestCase):
             }]
         }
         result = usage.estimate(scenario, catalog)
-        self.assertEqual(610.0, result["total_credits"])
+        self.assertEqual(510.0, result["total_credits"])
+        self.assertEqual(0, result["tasks"][0]["uncached_input_tokens_each"])
         self.assertEqual([], result["assumptions"])
+
+    def test_usage_rejects_cached_tokens_above_total_input(self) -> None:
+        catalog = usage.load_catalog(ROOT / "config" / "model-catalog.json")
+        with self.assertRaises(usage.UsageError):
+            usage.estimate({"tasks": [{
+                "model": "terra",
+                "input_tokens": 100,
+                "cached_input_tokens": 101,
+                "output_tokens": 0,
+            }]}, catalog)
 
     def test_usage_marks_effort_multiplier_assumption(self) -> None:
         catalog = usage.load_catalog(ROOT / "config" / "model-catalog.json")
@@ -136,6 +147,27 @@ class OutcomeTest(unittest.TestCase):
         payload = json.loads(completed.stdout)
         self.assertEqual("sol", payload["primary"]["model"])
         self.assertEqual("high", payload["primary"]["effort"])
+
+    def test_install_dry_run_can_preview_existing_destination(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            destination = Path(temporary) / "skills" / "model-effort-router"
+            destination.mkdir(parents=True)
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "scripts" / "install_skill.py"),
+                    "--codex-home",
+                    temporary,
+                    "--dry-run",
+                ],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(0, completed.returncode, completed.stderr)
+            payload = json.loads(completed.stdout)
+            self.assertTrue(payload["destination_exists"])
+            self.assertTrue(payload["replace_required_for_install"])
 
 
 if __name__ == "__main__":

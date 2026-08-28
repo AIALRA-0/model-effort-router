@@ -34,11 +34,18 @@ def copy_package(destination: Path, replace: bool, dry_run: bool) -> dict[str, o
     destination = destination.resolve()
     if destination == Path(destination.anchor) or len(destination.parts) < 3:
         raise InstallError("destination is too broad")
-    if destination.exists() and not replace:
+    if destination.exists() and not replace and not dry_run:
         raise InstallError("destination already exists; pass --replace to update it")
     planned = INCLUDED_FILES + [f"{name}/" for name in INCLUDED_DIRECTORIES]
     if dry_run:
-        return {"installed": False, "dry_run": True, "destination": str(destination), "included": planned}
+        return {
+            "installed": False,
+            "dry_run": True,
+            "destination": str(destination),
+            "destination_exists": destination.exists(),
+            "replace_required_for_install": destination.exists(),
+            "included": planned,
+        }
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary_root = Path(tempfile.mkdtemp(prefix="model-effort-router-install-", dir=destination.parent))
     temporary_skill = temporary_root / "model-effort-router"
