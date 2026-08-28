@@ -817,6 +817,11 @@ def prospective(action: str, output_dir: Path, telemetry_dir: Path) -> dict[str,
     state = read_json(state_path)
     records_path = telemetry_dir / "runs.jsonl"
     records = read_jsonl(records_path) if records_path.exists() else []
+    trial_started_at = str(state.get("started_at") or "")
+    records = [
+        item for item in records
+        if trial_started_at and str(item.get("started_at") or "") >= trial_started_at
+    ]
     completed = [item for item in records if item.get("outcome", {}).get("status") in {"accepted", "rejected"}]
     days = {str(item.get("started_at", ""))[:10] for item in completed if item.get("started_at")}
     projects = {item.get("project_id") for item in completed if item.get("project_id")}

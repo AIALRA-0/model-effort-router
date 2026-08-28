@@ -12,7 +12,7 @@ A Codex Skill that recommends one concrete next segment and one exact model-effo
 
 It also provides a local evidence loop for deciding whether Sol was necessary, whether Terra or Luna can sustain later iterations, and which routes consume the weekly allowance
 
-Current version: `0.3.0`
+Current version: `0.3.1`
 
 Current status: history audit, per-run telemetry, and a reversible 14-active-day prospective trial are implemented; causal model-quality differences remain unverified
 
@@ -153,7 +153,7 @@ python -m unittest discover -s tests -v
 python -m compileall -q scripts tests
 ```
 
-Version `0.3.0` is tested on Python 3.10 through 3.13, including cumulative-token deltas, damaged JSONL, mixed routes, cache reuse, zero source mutation, privacy scanning, and prospective rollback
+Version `0.3.1` is tested on Python 3.10 through 3.13, including cumulative-token deltas, damaged JSONL, mixed routes, cache reuse, zero source mutation, privacy scanning, pre-trial record exclusion, and prospective rollback
 
 Historical observation describes what happened and does not establish model causality
 

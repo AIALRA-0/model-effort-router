@@ -127,15 +127,25 @@ class HistoryAuditTest(unittest.TestCase):
             output = Path(temporary) / "analysis"
             telemetry = Path(temporary) / "telemetry"
             telemetry.mkdir()
-            audit.prospective("init", output, telemetry)
-            run = {
+            state = audit.prospective("init", output, telemetry)
+            state["started_at"] = "2026-08-02T00:00:00Z"
+            audit.write_json(output / "prospective-trial.json", state)
+            old_run = {
                 "started_at": "2026-08-01T00:00:00Z",
+                "project_id": "old-project",
+                "actual": {"model": "sol", "effort": "xhigh"},
+                "outcome": {"status": "accepted", "severe_defect": False, "scope_violation": False, "regression": False},
+            }
+            run = {
+                "started_at": "2026-08-03T00:00:00Z",
                 "project_id": "project",
                 "actual": {"model": "terra", "effort": "medium"},
                 "outcome": {"status": "accepted", "severe_defect": True, "scope_violation": False, "regression": False},
             }
-            (telemetry / "runs.jsonl").write_text(json.dumps(run) + "\n", encoding="utf-8")
+            (telemetry / "runs.jsonl").write_text(json.dumps(old_run) + "\n" + json.dumps(run) + "\n", encoding="utf-8")
             status = audit.prospective("status", output, telemetry)
+            self.assertEqual(1, status["observed"]["completed_runs"])
+            self.assertNotIn("sol:xhigh", status["observed"]["route_counts"])
             self.assertTrue(status["automatic_revert_required"])
             self.assertFalse(status["review_ready"])
 
