@@ -6,7 +6,7 @@
   <a href="README.md">简体中文</a> · <a href="SECURITY.md">Security and privacy</a> · <a href="CHANGELOG.md">Changelog</a>
 </p>
 
-# Model Effort Router
+<h1 align="center">Model Effort Router</h1>
 
 A Codex Skill that recommends one concrete next segment and one exact model-effort route after every delivery
 

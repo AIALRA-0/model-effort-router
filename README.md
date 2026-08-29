@@ -6,7 +6,7 @@
   <a href="README.en.md">English</a> · <a href="SECURITY.md">安全与隐私</a> · <a href="CHANGELOG.md">变更记录</a>
 </p>
 
-# Model Effort Router
+<h1 align="center">Model Effort Router</h1>
 
 一个面向 Codex 长流程项目的模型与推理档位路由 Skill
 
