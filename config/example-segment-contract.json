@@ -1,0 +1,15 @@
+{
+  "goal": "Deliver one bounded implementation segment with verified behavior",
+  "non_goals": [
+    "Do not change unrelated public interfaces"
+  ],
+  "allowed_scope": [
+    "Modify only the approved implementation unit and its tests"
+  ],
+  "acceptance_checks": [
+    "All required checks pass without regression"
+  ],
+  "stop_conditions": [
+    "Stop when the acceptance checks pass or the contract changes"
+  ]
+}

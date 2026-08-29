@@ -1,0 +1,39 @@
+{
+  "perspective": "forensic",
+  "arms": {
+    "A": {
+      "accepted": true,
+      "corrections": 0,
+      "rework_minutes": 5,
+      "scores": {
+        "goal": 4,
+        "correctness": 4,
+        "completeness": 4,
+        "evidence": 4,
+        "scope": 4
+      },
+      "required_checks_pass": true,
+      "decisive_correctness": false,
+      "data_damage": false,
+      "unauthorized_external_write": false
+    },
+    "B": {
+      "accepted": true,
+      "corrections": 0,
+      "rework_minutes": 5,
+      "scores": {
+        "goal": 4,
+        "correctness": 4,
+        "completeness": 4,
+        "evidence": 4,
+        "scope": 4
+      },
+      "required_checks_pass": true,
+      "decisive_correctness": false,
+      "data_damage": false,
+      "unauthorized_external_write": false
+    }
+  },
+  "preference": "tie",
+  "confidence": "high"
+}

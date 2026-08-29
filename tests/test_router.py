@@ -64,6 +64,50 @@ class RouterCasesTest(unittest.TestCase):
         result = router.recommend({"phase": "planning"})
         self.assertGreaterEqual(len(result["required_before_execution"]), 4)
 
+    def test_active_segment_keeps_locked_route_until_boundary(self) -> None:
+        result = router.recommend({
+            "phase": "planning",
+            "segment_active": True,
+            "locked_model": "terra",
+            "locked_effort": "high",
+        })
+        self.assertEqual("keep_locked_route_until_boundary", result["segment_continuity"]["decision"])
+        self.assertFalse(result["segment_continuity"]["handoff_required"])
+
+    def test_boundary_route_change_requires_handoff(self) -> None:
+        result = router.recommend({
+            "phase": "planning",
+            "segment_active": True,
+            "locked_model": "terra",
+            "locked_effort": "high",
+            "segment_boundary_reached": True,
+        })
+        self.assertEqual("create_verified_handoff", result["segment_continuity"]["decision"])
+        self.assertTrue(result["segment_continuity"]["handoff_required"])
+
+    def test_verified_handoff_waits_for_host_readback(self) -> None:
+        result = router.recommend({
+            "phase": "planning",
+            "segment_active": True,
+            "locked_model": "terra",
+            "locked_effort": "high",
+            "segment_boundary_reached": True,
+            "handoff_contract_verified": True,
+        })
+        self.assertEqual("await_target_route_readback", result["segment_continuity"]["decision"])
+
+    def test_confirmed_segment_switch_requires_verified_handoff(self) -> None:
+        with self.assertRaises(router.InputError):
+            router.recommend({
+                "phase": "planning",
+                "segment_active": True,
+                "locked_model": "terra",
+                "locked_effort": "high",
+                "segment_boundary_reached": True,
+                "host_can_switch": True,
+                "host_switch_confirmed": True,
+            })
+
 
 class UsageTest(unittest.TestCase):
     def test_usage_exact_observed_tokens(self) -> None:

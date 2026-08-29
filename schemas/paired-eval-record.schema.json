@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ExampleOrg-0/model-effort-router/main/schemas/paired-eval-record.schema.json",
+  "title": "Privacy-preserving paired route evaluation record",
+  "type": "object",
+  "required": ["schema_version", "pair_id", "case_id", "project_id", "baseline_id", "task_cell", "phase", "execution_shape", "risk_level", "verification_strength", "contract_frozen", "comparison_controls", "arms", "status", "judgments"],
+  "properties": {
+    "schema_version": {"const": "0.4.0"},
+    "pair_id": {"type": "string", "format": "uuid"},
+    "case_id": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "project_id": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "baseline_id": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "task_cell": {"enum": ["mechanical", "routine", "complex", "debugging", "strategic", "convergence"]},
+    "phase": {"type": "string"},
+    "execution_shape": {"enum": ["single_answer", "single_execution", "continuous_iteration", "long_flow", "fault_recovery", "batch_processing", "cross_project_coordination"]},
+    "risk_level": {"type": "integer", "minimum": 0, "maximum": 4},
+    "verification_strength": {"type": "integer", "minimum": 0, "maximum": 4},
+    "contract_frozen": {"const": true},
+    "comparison_controls": {
+      "type": "object",
+      "required": ["context_mode", "tool_profile", "time_limit_minutes", "execution_mode", "external_write_risk"],
+      "properties": {
+        "context_mode": {"enum": ["fresh", "compressed_handoff"]},
+        "tool_profile": {"enum": ["same_tools", "read_only", "code_and_tests", "browser_review"]},
+        "time_limit_minutes": {"type": "integer", "minimum": 1, "maximum": 1440},
+        "execution_mode": {"enum": ["execute", "plan_only", "simulation"]},
+        "external_write_risk": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "reverse_of": {"type": ["string", "null"], "format": "uuid"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "attached_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "arms": {
+      "type": "object",
+      "required": ["A", "B"],
+      "properties": {
+        "A": {"$ref": "#/$defs/arm"},
+        "B": {"$ref": "#/$defs/arm"}
+      },
+      "additionalProperties": false
+    },
+    "status": {"enum": ["planned", "attached", "judged", "invalid"]},
+    "invalid_reason": {"type": ["string", "null"]},
+    "judgments": {
+      "type": "object",
+      "properties": {
+        "bounded": {"$ref": "#/$defs/judgment"},
+        "forensic": {"$ref": "#/$defs/judgment"},
+        "user": {"$ref": "#/$defs/judgment"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "route": {
+      "type": "object",
+      "required": ["model", "effort"],
+      "properties": {
+        "model": {"enum": ["sol", "terra", "luna"]},
+        "effort": {"enum": ["low", "medium", "high", "xhigh"]}
+      },
+      "additionalProperties": false
+    },
+    "arm": {
+      "type": "object",
+      "required": ["role", "assigned", "run_ref", "actual", "outcome", "verification"],
+      "properties": {
+        "role": {"enum": ["preset", "ceiling"]},
+        "assigned": {"$ref": "#/$defs/route"},
+        "run_ref": {"type": ["string", "null"], "pattern": "^[a-f0-9]{20}$"},
+        "actual": {"anyOf": [{"$ref": "#/$defs/route"}, {"type": "null"}]},
+        "outcome": {"type": ["object", "null"]},
+        "verification": {"type": ["object", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "judgment": {
+      "type": "object",
+      "required": ["perspective", "arms", "preference", "confidence"],
+      "properties": {
+        "perspective": {"enum": ["bounded", "forensic", "user"]},
+        "preference": {"enum": ["A", "B", "tie", "none"]},
+        "confidence": {"enum": ["low", "medium", "high"]},
+        "arms": {
+          "type": "object",
+          "required": ["A", "B"],
+          "properties": {
+            "A": {"type": "object"},
+            "B": {"type": "object"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

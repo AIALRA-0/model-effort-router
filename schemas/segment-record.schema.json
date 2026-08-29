@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ExampleOrg-0/model-effort-router/main/schemas/segment-record.schema.json",
+  "title": "Privacy-preserving task segment route lock",
+  "type": "object",
+  "required": ["schema_version", "segment_id", "project_id", "task_id", "phase", "execution_shape", "locked_route", "contract_digest", "status", "checkpoints", "contains_raw_task_content"],
+  "properties": {
+    "schema_version": {"const": "0.5.0"},
+    "segment_id": {"type": "string", "format": "uuid"},
+    "parent_segment_id": {"type": ["string", "null"], "format": "uuid"},
+    "project_id": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "task_id": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "phase": {"type": "string"},
+    "execution_shape": {"type": "string"},
+    "risk_level": {"type": "integer", "minimum": 0, "maximum": 4},
+    "verification_strength": {"type": "integer", "minimum": 0, "maximum": 4},
+    "locked_route": {"$ref": "#/$defs/route"},
+    "contract_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "status": {"enum": ["active", "handed_off", "completed", "rejected"]},
+    "started_at": {"type": "string", "format": "date-time"},
+    "completed_at": {"type": ["string", "null"], "format": "date-time"},
+    "checkpoints": {"type": "array", "items": {"$ref": "#/$defs/checkpoint"}},
+    "pending_handoff": {"anyOf": [{"$ref": "#/$defs/pendingHandoff"}, {"type": "null"}]},
+    "lock_checks": {"type": "integer", "minimum": 0},
+    "blocked_switch_attempts": {"type": "integer", "minimum": 0},
+    "outcome": {"anyOf": [{"$ref": "#/$defs/outcome"}, {"type": "null"}]},
+    "contains_raw_task_content": {"const": false}
+  },
+  "$defs": {
+    "route": {
+      "type": "object",
+      "required": ["model", "effort"],
+      "properties": {
+        "model": {"enum": ["sol", "terra", "luna"]},
+        "effort": {"enum": ["low", "medium", "high", "xhigh"]}
+      },
+      "additionalProperties": false
+    },
+    "checkpoint": {
+      "type": "object",
+      "required": ["checkpoint_id", "created_at", "milestone_state", "mandatory_checks_passed", "failed_hypotheses", "evidence_conflict", "risk_escalated", "completed_actions", "remaining_items", "switch_allowed", "switch_reason"],
+      "properties": {
+        "checkpoint_id": {"type": "string", "format": "uuid"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "milestone_state": {"enum": ["in_progress", "passed", "blocked"]},
+        "mandatory_checks_passed": {"type": "boolean"},
+        "failed_hypotheses": {"type": "integer", "minimum": 0, "maximum": 20},
+        "evidence_conflict": {"type": "boolean"},
+        "risk_escalated": {"type": "boolean"},
+        "completed_actions": {"type": "integer", "minimum": 0},
+        "remaining_items": {"type": "integer", "minimum": 0},
+        "switch_allowed": {"type": "boolean"},
+        "switch_reason": {"enum": ["clean_boundary", "hard_escalation", "segment_still_active"]}
+      },
+      "additionalProperties": false
+    },
+    "pendingHandoff": {
+      "type": "object",
+      "required": ["handoff_id", "handoff_digest", "contract_digest", "target_route", "created_at", "contract_changed"],
+      "properties": {
+        "handoff_id": {"type": "string", "format": "uuid"},
+        "handoff_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "contract_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "target_route": {"$ref": "#/$defs/route"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "contract_changed": {"type": "boolean"},
+        "accepted_at": {"type": "string", "format": "date-time"},
+        "actual_route": {"$ref": "#/$defs/route"}
+      },
+      "additionalProperties": false
+    },
+    "outcome": {
+      "type": "object",
+      "required": ["accepted", "declared_status", "severe_defect", "scope_violation", "regression", "tests_run", "tests_passed", "tests_failed"],
+      "properties": {
+        "accepted": {"type": "boolean"},
+        "declared_status": {"enum": ["accepted", "rejected"]},
+        "severe_defect": {"type": "boolean"},
+        "scope_violation": {"type": "boolean"},
+        "regression": {"type": "boolean"},
+        "tests_run": {"type": "integer", "minimum": 0},
+        "tests_passed": {"type": "integer", "minimum": 0},
+        "tests_failed": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

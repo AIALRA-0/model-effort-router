@@ -1,0 +1,50 @@
+{
+  "schema_version": "0.4.0",
+  "total_pair_budget": 24,
+  "initial_pairs_per_cell": 2,
+  "maximum_pairs_per_cell": 4,
+  "minimum_projects_for_validation": 2,
+  "minimum_execution_shapes_for_validation": 2,
+  "maximum_average_score_gap": 0.5,
+  "maximum_extra_corrections": 1,
+  "rework_minutes": {
+    "mechanical": 15,
+    "routine": 15,
+    "complex": 30,
+    "debugging": 30,
+    "strategic": 30,
+    "convergence": 30
+  },
+  "cells": {
+    "mechanical": {
+      "phases": ["mechanical", "batch_edit", "log_summary", "format_conversion", "test_execution"],
+      "preset": {"model": "luna", "effort": "medium"},
+      "ceiling": {"model": "sol", "effort": "high"}
+    },
+    "routine": {
+      "phases": ["routine_implementation"],
+      "preset": {"model": "terra", "effort": "medium"},
+      "ceiling": {"model": "sol", "effort": "high"}
+    },
+    "complex": {
+      "phases": ["complex_implementation"],
+      "preset": {"model": "terra", "effort": "high"},
+      "ceiling": {"model": "sol", "effort": "xhigh"}
+    },
+    "debugging": {
+      "phases": ["debugging"],
+      "preset": {"model": "terra", "effort": "high"},
+      "ceiling": {"model": "sol", "effort": "xhigh"}
+    },
+    "strategic": {
+      "phases": ["planning", "review", "evaluation", "decision"],
+      "preset": {"model": "sol", "effort": "high"},
+      "ceiling": {"model": "sol", "effort": "xhigh"}
+    },
+    "convergence": {
+      "phases": ["project_convergence", "first_runnable", "release_review"],
+      "preset": {"model": "sol", "effort": "high"},
+      "ceiling": {"model": "sol", "effort": "xhigh"}
+    }
+  }
+}

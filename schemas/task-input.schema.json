@@ -106,6 +106,24 @@
       "type": "boolean",
       "default": false
     },
+    "segment_active": {
+      "type": "boolean",
+      "default": false
+    },
+    "locked_model": {
+      "enum": ["sol", "terra", "luna"]
+    },
+    "locked_effort": {
+      "enum": ["low", "medium", "high", "xhigh"]
+    },
+    "segment_boundary_reached": {
+      "type": "boolean",
+      "default": false
+    },
+    "handoff_contract_verified": {
+      "type": "boolean",
+      "default": false
+    },
     "stop_conditions": {
       "type": "array",
       "items": {

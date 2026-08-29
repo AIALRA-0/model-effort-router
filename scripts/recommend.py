@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.2.0"
+VERSION = "0.5.0"
 PROFILES = ("quality_first", "guarded_high", "balanced")
 PHASE_ALIASES = {
     "research": "initial_research", "convergence": "project_convergence",
@@ -224,6 +224,54 @@ def _execution(data: dict[str, Any]) -> str:
     return "confirmed_switched" if confirmed else ("switch_available_but_unconfirmed" if can_switch else "recommendation_only")
 
 
+def _segment_continuity(data: dict[str, Any], primary: dict[str, Any], signals: dict[str, Any]) -> dict[str, Any]:
+    """Keep an active segment on its locked route until a verified boundary handoff."""
+
+    active = _boolean(data, "segment_active")
+    boundary = _boolean(data, "segment_boundary_reached")
+    handoff_verified = _boolean(data, "handoff_contract_verified")
+    if not active:
+        return {
+            "policy": "locked_until_boundary",
+            "decision": "start_new_locked_segment",
+            "handoff_required": False,
+            "locked_route": None,
+            "recommended_route": {"model": primary["model"], "effort": primary["effort"]},
+        }
+    locked_model = data.get("locked_model")
+    locked_effort = data.get("locked_effort")
+    if not isinstance(locked_model, str) or not isinstance(locked_effort, str):
+        raise InputError("active segment requires locked_model and locked_effort")
+    locked = {"model": locked_model.strip().lower(), "effort": locked_effort.strip().lower()}
+    if locked["model"] not in {"sol", "terra", "luna"} or locked["effort"] not in {"low", "medium", "high", "xhigh"}:
+        raise InputError("locked route must use Sol, Terra, or Luna with low, medium, high, or xhigh")
+    recommended = {"model": primary["model"], "effort": primary["effort"]}
+    if locked != recommended and _boolean(data, "host_switch_confirmed") and not handoff_verified:
+        raise InputError("a confirmed segment switch requires a verified handoff contract")
+    if locked == recommended:
+        decision = "continue_locked_segment"
+        handoff_required = False
+    elif not boundary and not signals["hard_xhigh_gate"]:
+        decision = "keep_locked_route_until_boundary"
+        handoff_required = False
+    elif not handoff_verified:
+        decision = "create_verified_handoff"
+        handoff_required = True
+    elif not _boolean(data, "host_switch_confirmed"):
+        decision = "await_target_route_readback"
+        handoff_required = False
+    else:
+        decision = "verified_switch_accepted"
+        handoff_required = False
+    return {
+        "policy": "locked_until_boundary",
+        "decision": decision,
+        "handoff_required": handoff_required,
+        "locked_route": locked,
+        "recommended_route": recommended,
+    }
+
+
 def recommend(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise InputError("input must be a JSON object")
@@ -269,6 +317,7 @@ def recommend(payload: dict[str, Any]) -> dict[str, Any]:
     return {
         "version": VERSION, "task_class": phase, "primary": primary,
         "alternatives": alternatives, "execution_status": _execution(payload),
+        "segment_continuity": _segment_continuity(payload, primary, s),
         "policy_confidence": confidence,
         "calibration_status": "local_data_available_but_not_a_probability" if samples >= 30 else "policy_based_uncalibrated",
         "confidence_note": "policy_confidence describes rule agreement, not success probability",

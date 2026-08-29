@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.5.0 - 2026-08-28
+
+- 新增任务段模型锁，活动任务段在完成边界或硬升级门之前保持同一模型和 effort
+- 新增结构化切换交接合同、内容安全门和 Codex `turn_context` 目标路线读回
+- 新增连续路线与切换路线的配对评测，量化恢复时间、重复动作、纠正次数、上下文缺失和质量差异
+- 新增 `no_material_switch_loss`、`recoverable_switch_loss`、`material_switch_loss`、`switch_benefit`、`both_failed` 和 `indeterminate` 判定
+- 新增任务段聚合报告、切换评测报告、12 对预算、反序复测和跨项目跨阶段完成门
+- 新增强制用户评审不可用终态；它关闭待处理动作、保持 `indeterminate`、排除路线完成门，并允许后续真实用户判断覆盖
+
+## 0.4.0 - 2026-08-28
+
+- 新增最多 24 对真实任务的少样本配对评测，比较预设路线与高端对照路线
+- 新增随机 A/B、反序复测、Codex `turn_context` 精确路线读回和缺失读回拒绝门
+- 新增有限认知、深度和用户三层盲评，以及 `preset_sufficient`、`surface_only`、`material_gap`、`both_failed` 和 `indeterminate` 判定
+- 新增 4 对、2 个项目和 2 种执行形态的保守完成门，并禁止历史描述性数据进入配对结论
+- 新增 HMAC 化名、结构化评分白名单、24 对总预算和仓库外私有报告
+
 ## 0.3.1 - 2026-08-27
 
 - 前瞻试运行只统计 `prospective init` 之后开始的遥测记录

@@ -1,6 +1,6 @@
 interface:
   display_name: "Model Effort Router"
-  short_description: "每轮交付后推荐下一段任务与模型档位"
-  default_prompt: "Use $model-effort-router throughout this project so every delivery ends with one concrete next segment and an exact Sol, Terra, or Luna effort recommendation."
+  short_description: "推荐下一段路线、锁定执行模型并验证切换是否造成质量损失"
+  default_prompt: "Use $model-effort-router to lock one route per task segment, require a verified handoff before switching, and recommend the next concrete segment after delivery."
 policy:
   allow_implicit_invocation: true

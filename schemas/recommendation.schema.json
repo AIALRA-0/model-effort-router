@@ -9,6 +9,7 @@
     "primary",
     "alternatives",
     "execution_status",
+    "segment_continuity",
     "acceptance_contract"
   ],
   "properties": {
@@ -35,6 +36,32 @@
         "confirmed_switched"
       ]
     },
+    "segment_continuity": {
+      "type": "object",
+      "required": ["policy", "decision", "handoff_required", "locked_route", "recommended_route"],
+      "properties": {
+        "policy": {"const": "locked_until_boundary"},
+        "decision": {
+          "enum": [
+            "start_new_locked_segment",
+            "continue_locked_segment",
+            "keep_locked_route_until_boundary",
+            "create_verified_handoff",
+            "await_target_route_readback",
+            "verified_switch_accepted"
+          ]
+        },
+        "handoff_required": {"type": "boolean"},
+        "locked_route": {
+          "anyOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/lockedRoute"}
+          ]
+        },
+        "recommended_route": {"$ref": "#/$defs/lockedRoute"}
+      },
+      "additionalProperties": false
+    },
     "policy_confidence": {
       "enum": [
         "low",
@@ -56,6 +83,15 @@
     }
   },
   "$defs": {
+    "lockedRoute": {
+      "type": "object",
+      "required": ["model", "effort"],
+      "properties": {
+        "model": {"enum": ["sol", "terra", "luna", "chatgpt-pro-web"]},
+        "effort": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
     "route": {
       "type": "object",
       "required": [

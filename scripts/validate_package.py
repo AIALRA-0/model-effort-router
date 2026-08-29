@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import json
 import re
-import sys
 from pathlib import Path
 
 
@@ -23,9 +22,21 @@ REQUIRED_FILES = [
     "scripts/recommend.py",
     "scripts/telemetry.py",
     "scripts/history_audit.py",
+    "scripts/paired_eval.py",
+    "scripts/segment_guard.py",
+    "scripts/switch_eval.py",
     "schemas/telemetry-record.schema.json",
     "schemas/history-audit-record.schema.json",
+    "schemas/paired-eval-record.schema.json",
+    "schemas/segment-record.schema.json",
+    "schemas/handoff-contract.schema.json",
+    "schemas/switch-eval-record.schema.json",
     "references/history-audit-policy.md",
+    "references/paired-evaluation-policy.md",
+    "references/segment-continuity-policy.md",
+    "references/switch-loss-evaluation-policy.md",
+    "config/paired-eval-policy.json",
+    "config/switch-eval-policy.json",
 ]
 PUBLIC_TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".json", ".txt"}
 SENSITIVE_PATTERNS = {
@@ -67,11 +78,44 @@ def validate() -> dict[str, object]:
     except (OSError, json.JSONDecodeError):
         errors.append({"code": "INVALID_COLLECTION_POLICY", "path": "config/collection-policy.json"})
     try:
+        paired_policy = json.loads((ROOT / "config" / "paired-eval-policy.json").read_text(encoding="utf-8"))
+        if paired_policy.get("total_pair_budget") != 24:
+            errors.append({"code": "INVALID_PAIRED_EVAL_BUDGET", "path": "config/paired-eval-policy.json"})
+        if paired_policy.get("initial_pairs_per_cell") != 2 or paired_policy.get("maximum_pairs_per_cell") != 4:
+            errors.append({"code": "INVALID_PAIRED_EVAL_CELL_GATE", "path": "config/paired-eval-policy.json"})
+        if len(paired_policy.get("cells", {})) != 6:
+            errors.append({"code": "INVALID_PAIRED_EVAL_CELL_COUNT", "path": "config/paired-eval-policy.json"})
+    except (OSError, json.JSONDecodeError):
+        errors.append({"code": "INVALID_PAIRED_EVAL_POLICY", "path": "config/paired-eval-policy.json"})
+    try:
+        switch_policy = json.loads((ROOT / "config" / "switch-eval-policy.json").read_text(encoding="utf-8"))
+        if switch_policy.get("total_pair_budget") != 12:
+            errors.append({"code": "INVALID_SWITCH_EVAL_BUDGET", "path": "config/switch-eval-policy.json"})
+        if switch_policy.get("maximum_pairs_per_transition") != 4:
+            errors.append({"code": "INVALID_SWITCH_EVAL_TRANSITION_GATE", "path": "config/switch-eval-policy.json"})
+        if switch_policy.get("minimum_projects_for_validation") != 2 or switch_policy.get("minimum_phases_for_validation") != 2:
+            errors.append({"code": "INVALID_SWITCH_EVAL_COVERAGE_GATE", "path": "config/switch-eval-policy.json"})
+    except (OSError, json.JSONDecodeError):
+        errors.append({"code": "INVALID_SWITCH_EVAL_POLICY", "path": "config/switch-eval-policy.json"})
+    try:
         skill_text = (ROOT / "SKILL.md").read_text(encoding="utf-8")
         if not skill_text.startswith("---\n") or "name: model-effort-router" not in skill_text:
             errors.append({"code": "INVALID_SKILL_FRONTMATTER", "path": "SKILL.md"})
         if "telemetry.py start" not in skill_text or "telemetry.py finish" not in skill_text:
             errors.append({"code": "SKILL_DOES_NOT_COLLECT_RUN_LIFECYCLE", "path": "SKILL.md"})
+        if "paired_eval.py" not in skill_text or "surface_only" not in skill_text:
+            errors.append({"code": "SKILL_DOES_NOT_ROUTE_PAIRED_EVALUATION", "path": "SKILL.md"})
+        if "segment_guard.py" not in skill_text or "locked_until_boundary" not in (ROOT / "scripts" / "recommend.py").read_text(encoding="utf-8"):
+            errors.append({"code": "SKILL_DOES_NOT_ENFORCE_SEGMENT_LOCK", "path": "SKILL.md"})
+        switch_script = (ROOT / "scripts" / "switch_eval.py").read_text(encoding="utf-8")
+        switch_schema = json.loads((ROOT / "schemas" / "switch-eval-record.schema.json").read_text(encoding="utf-8"))
+        dispositions = switch_schema.get("properties", {}).get("user_review_disposition", {}).get("enum", [])
+        if "switch_eval.py" not in skill_text or "material_switch_loss" not in skill_text:
+            errors.append({"code": "SKILL_DOES_NOT_ROUTE_SWITCH_EVALUATION", "path": "SKILL.md"})
+        if "resolve-review" not in switch_script or "required_user_review_unavailable" not in switch_script:
+            errors.append({"code": "SWITCH_EVAL_MISSING_UNAVAILABLE_REVIEW_TERMINAL", "path": "scripts/switch_eval.py"})
+        if set(dispositions) != {"pending", "completed", "unavailable"}:
+            errors.append({"code": "SWITCH_EVAL_INVALID_USER_REVIEW_DISPOSITIONS", "path": "schemas/switch-eval-record.schema.json"})
     except OSError:
         pass
     if not (ROOT / ".github" / "workflows" / "ci.yml").is_file():

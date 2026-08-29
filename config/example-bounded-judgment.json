@@ -1,0 +1,17 @@
+{
+  "perspective": "bounded",
+  "arms": {
+    "A": {
+      "accepted": true,
+      "corrections": 0,
+      "rework_minutes": 0
+    },
+    "B": {
+      "accepted": true,
+      "corrections": 0,
+      "rework_minutes": 0
+    }
+  },
+  "preference": "tie",
+  "confidence": "high"
+}

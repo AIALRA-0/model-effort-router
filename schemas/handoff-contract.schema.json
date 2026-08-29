@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ExampleOrg-0/model-effort-router/main/schemas/handoff-contract.schema.json",
+  "title": "Private task-segment handoff contract",
+  "type": "object",
+  "required": ["contract", "state"],
+  "properties": {
+    "contract": {"$ref": "#/$defs/contract"},
+    "state": {
+      "type": "object",
+      "required": ["confirmed_facts", "frozen_decisions", "failed_hypotheses", "completed_actions", "remaining_work", "current_verification"],
+      "properties": {
+        "confirmed_facts": {"$ref": "#/$defs/nonEmptyList"},
+        "frozen_decisions": {"$ref": "#/$defs/nonEmptyList"},
+        "failed_hypotheses": {"$ref": "#/$defs/list"},
+        "completed_actions": {"$ref": "#/$defs/nonEmptyList"},
+        "remaining_work": {"$ref": "#/$defs/list"},
+        "current_verification": {"$ref": "#/$defs/nonEmptyList"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "item": {"type": "string", "minLength": 1, "maxLength": 500},
+    "list": {"type": "array", "maxItems": 20, "items": {"$ref": "#/$defs/item"}},
+    "nonEmptyList": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"$ref": "#/$defs/item"}},
+    "contract": {
+      "type": "object",
+      "required": ["goal", "non_goals", "allowed_scope", "acceptance_checks", "stop_conditions"],
+      "properties": {
+        "goal": {"$ref": "#/$defs/item"},
+        "non_goals": {"$ref": "#/$defs/list"},
+        "allowed_scope": {"$ref": "#/$defs/nonEmptyList"},
+        "acceptance_checks": {"$ref": "#/$defs/nonEmptyList"},
+        "stop_conditions": {"$ref": "#/$defs/nonEmptyList"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

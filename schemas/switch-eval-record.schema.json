@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ExampleOrg-0/model-effort-router/main/schemas/switch-eval-record.schema.json",
+  "title": "Privacy-preserving model switch loss pair",
+  "type": "object",
+  "required": ["schema_version", "pair_id", "case_id", "project_id", "checkpoint_id", "transition_key", "phase", "execution_shape", "comparison_controls", "arms", "status", "judgments", "contains_raw_task_content"],
+  "properties": {
+    "schema_version": {"const": "0.5.0"},
+    "pair_id": {"type": "string", "format": "uuid"},
+    "reverse_of": {"type": ["string", "null"], "format": "uuid"},
+    "case_id": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "project_id": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "checkpoint_id": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "source_segment_ref": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "handoff_ref": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "handoff_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "transition_key": {"type": "string"},
+    "phase": {"type": "string"},
+    "execution_shape": {"type": "string"},
+    "risk_level": {"type": "integer", "minimum": 0, "maximum": 4},
+    "verification_strength": {"type": "integer", "minimum": 0, "maximum": 4},
+    "comparison_controls": {
+      "type": "object",
+      "required": ["tool_profile", "time_limit_minutes", "execution_mode", "external_write_risk", "same_checkpoint_required"],
+      "properties": {
+        "tool_profile": {"enum": ["same_tools", "read_only", "code_and_tests", "browser_review"]},
+        "time_limit_minutes": {"type": "integer", "minimum": 1, "maximum": 1440},
+        "execution_mode": {"enum": ["execute", "plan_only", "simulation"]},
+        "external_write_risk": {"type": "boolean"},
+        "same_checkpoint_required": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "arms": {
+      "type": "object",
+      "required": ["A", "B"],
+      "properties": {"A": {"$ref": "#/$defs/arm"}, "B": {"$ref": "#/$defs/arm"}},
+      "additionalProperties": false
+    },
+    "status": {"enum": ["planned", "attached", "judged", "invalid"]},
+    "invalid_reason": {"type": ["string", "null"]},
+    "user_review_disposition": {"enum": ["pending", "completed", "unavailable"]},
+    "judgments": {
+      "type": "object",
+      "properties": {
+        "bounded": {"$ref": "#/$defs/basicJudgment"},
+        "forensic": {"$ref": "#/$defs/forensicJudgment"},
+        "user": {"$ref": "#/$defs/basicJudgment"}
+      },
+      "additionalProperties": false
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "attached_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "contains_raw_task_content": {"const": false}
+  },
+  "$defs": {
+    "route": {
+      "type": "object",
+      "required": ["model", "effort"],
+      "properties": {"model": {"enum": ["sol", "terra", "luna"]}, "effort": {"enum": ["low", "medium", "high", "xhigh"]}},
+      "additionalProperties": false
+    },
+    "arm": {
+      "type": "object",
+      "required": ["role", "assigned", "run_ref", "actual", "outcome", "verification"],
+      "properties": {
+        "role": {"enum": ["continuation", "switched"]},
+        "assigned": {"$ref": "#/$defs/route"},
+        "run_ref": {"type": ["string", "null"], "pattern": "^[a-f0-9]{20}$"},
+        "actual": {"anyOf": [{"$ref": "#/$defs/route"}, {"type": "null"}]},
+        "outcome": {"type": ["object", "null"]},
+        "verification": {"type": ["object", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "basicArm": {
+      "type": "object",
+      "required": ["accepted", "corrections", "recovery_minutes", "repeated_actions"],
+      "properties": {
+        "accepted": {"type": "boolean"},
+        "corrections": {"type": "integer", "minimum": 0},
+        "recovery_minutes": {"type": "integer", "minimum": 0},
+        "repeated_actions": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "forensicArm": {
+      "type": "object",
+      "required": ["accepted", "corrections", "recovery_minutes", "repeated_actions", "missing_context_items", "required_checks_pass", "severe_defect", "scope_violation", "regression", "scores"],
+      "properties": {
+        "accepted": {"type": "boolean"},
+        "corrections": {"type": "integer", "minimum": 0},
+        "recovery_minutes": {"type": "integer", "minimum": 0},
+        "repeated_actions": {"type": "integer", "minimum": 0},
+        "missing_context_items": {"type": "integer", "minimum": 0},
+        "required_checks_pass": {"type": "boolean"},
+        "severe_defect": {"type": "boolean"},
+        "scope_violation": {"type": "boolean"},
+        "regression": {"type": "boolean"},
+        "scores": {
+          "type": "object",
+          "required": ["goal", "correctness", "completeness", "evidence", "scope"],
+          "properties": {
+            "goal": {"type": "number", "minimum": 0, "maximum": 4},
+            "correctness": {"type": "number", "minimum": 0, "maximum": 4},
+            "completeness": {"type": "number", "minimum": 0, "maximum": 4},
+            "evidence": {"type": "number", "minimum": 0, "maximum": 4},
+            "scope": {"type": "number", "minimum": 0, "maximum": 4}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "basicJudgment": {
+      "type": "object",
+      "required": ["perspective", "arms", "preference", "confidence"],
+      "properties": {
+        "perspective": {"enum": ["bounded", "user"]},
+        "arms": {
+          "type": "object",
+          "required": ["A", "B"],
+          "properties": {"A": {"$ref": "#/$defs/basicArm"}, "B": {"$ref": "#/$defs/basicArm"}},
+          "additionalProperties": false
+        },
+        "preference": {"enum": ["A", "B", "tie", "none"]},
+        "confidence": {"enum": ["low", "medium", "high"]}
+      },
+      "additionalProperties": false
+    },
+    "forensicJudgment": {
+      "type": "object",
+      "required": ["perspective", "arms", "preference", "confidence"],
+      "properties": {
+        "perspective": {"const": "forensic"},
+        "arms": {
+          "type": "object",
+          "required": ["A", "B"],
+          "properties": {"A": {"$ref": "#/$defs/forensicArm"}, "B": {"$ref": "#/$defs/forensicArm"}},
+          "additionalProperties": false
+        },
+        "preference": {"enum": ["A", "B", "tie", "none"]},
+        "confidence": {"enum": ["low", "medium", "high"]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

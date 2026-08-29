@@ -1,0 +1,35 @@
+{
+  "contract": {
+    "goal": "Deliver one bounded implementation segment with verified behavior",
+    "non_goals": [
+      "Do not change unrelated public interfaces"
+    ],
+    "allowed_scope": [
+      "Modify only the approved implementation unit and its tests"
+    ],
+    "acceptance_checks": [
+      "All required checks pass without regression"
+    ],
+    "stop_conditions": [
+      "Stop when the acceptance checks pass or the contract changes"
+    ]
+  },
+  "state": {
+    "confirmed_facts": [
+      "The current baseline passes the mandatory checks"
+    ],
+    "frozen_decisions": [
+      "The approved interface remains unchanged"
+    ],
+    "failed_hypotheses": [],
+    "completed_actions": [
+      "The bounded checkpoint was created"
+    ],
+    "remaining_work": [
+      "Complete the remaining verified implementation"
+    ],
+    "current_verification": [
+      "The latest mandatory checkpoint passed"
+    ]
+  }
+}
